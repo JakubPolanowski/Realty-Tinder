@@ -11,8 +11,16 @@
     <title>{% block title %} {% endblock %}</title>
   </head>
   <body>
-    TODO NAVBAR
+    <nav
+      class="navbar is-size-3"
+      role="navigation"
+      aria-label="main navigation"
+    >
+      <div class="navbar-brand">
+        <a href="/" class="navbar-item"> <b>Home</b> </a>
+      </div>
+    </nav>
 
-    <div class="page_content">{% block content %}{% endblock %}</div>
+    {% block content %}{% endblock %}
   </body>
 </html>
