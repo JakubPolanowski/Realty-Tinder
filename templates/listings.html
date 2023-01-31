@@ -179,11 +179,29 @@
   </div>
 </section>
 
-<div id="modal-gallery" class="modal">
+<div id="modal-gallery" class="modal client-modal">
   <div class="modal-background"></div>
   <div class="modal-content" style="width: 80%"></div>
   <button class="modal-close is-large" aria-label="close"></button>
 </div>
+
+{% if user is none %}
+<div class="modal server-modal is-active">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Modal title</p>
+    </header>
+    <section class="modal-card-body">
+      <!-- Content ... -->
+    </section>
+    <footer class="modal-card-foot">
+      <button class="button is-success">Save changes</button>
+      <button class="button">Cancel</button>
+    </footer>
+  </div>
+</div>
+{% endif %}
 
 {# TODO make extraction async #}
 <script>
@@ -217,8 +235,8 @@
     }
 
     function closeAllModals() {
-      (document.querySelectorAll(".modal") || []).forEach(($modal) => {
-        closeModal($modal);
+      (document.querySelectorAll(".client-modal") || []).forEach(($modal) => {
+          closeModal($modal);
       });
     }
 
@@ -241,10 +259,12 @@
       ) || []
     ).forEach(($close) => {
       const $target = $close.closest(".modal");
-
-      $close.addEventListener("click", () => {
-        closeModal($target);
-      });
+      
+      if ($target.classList.contains('client-modal')) {
+        $close.addEventListener("click", () => {
+          closeModal($target);
+        });
+      }
     });
 
     // Add a keyboard event to close all modals
