@@ -51,17 +51,30 @@ def listings(listings_file: str, index: int):
     listing = dataset[index]
 
     # special values
-    listing['pretty price'] = f"{listing['price']:,}"
-    listing['pretty sqft'] = f"{listing['interior sqft']:,.0f}"
+    try:
+        listing['pretty price'] = f"{listing['price']:,}"
+    except TypeError:
+        listing['pretty price'] = listing['price']
+
+    try:
+        listing['pretty sqft'] = f"{listing['interior sqft']:,.0f}"
+    except TypeError:
+        listing['pretty sqft'] = listing['interior sqft']
+
     try:
         listing['price per sqft'] = f"{listing['price']/listing['interior sqft']:,.2f}"
     except TypeError:
         listing['price per sqft'] = ""
+
     try:
         listing['pretty acres'] = f"{listing['lot sqft']/43560:,.2f}"
     except TypeError:
         listing['pretty acres'] = ""
-    listing['pretty minutes'] = f"{listing['Minutes to Work']:,.0f}"
+
+    try:
+        listing['pretty minutes'] = f"{listing['Minutes to Work']:,.0f}"
+    except:
+        listing['pretty minutes'] = listing['Minutes to Work']
 
     if listing['Minutes to Work'] <= 15:
         listing['minutes class'] = "has-text-success"
