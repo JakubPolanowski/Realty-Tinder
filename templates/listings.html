@@ -5,7 +5,7 @@
     <div class="block">
       <div class="card">
         <div class="card-header">
-          <p class="card-header-title">{{ listings_file }}</p>
+          <p class="card-header-title">{{ listings_file|replace("_", " ") }}</p>
         </div>
         <div class="card-content">
           <div class="container">
@@ -20,7 +20,7 @@
               </div>
             </div>
 
-            <p class="subtitle">{{ index }} of {{ total }}</p>
+            <p class="subtitle">{{ index +1 }} of {{ total }}</p>
           </div>
           <div class="content">
             <div class="block">
@@ -31,6 +31,27 @@
                   alt="Placeholder image"
                 />
               </figure>
+            </div>
+            <div class="block">
+              <div class="columns">
+                <div class="column">
+                  <a
+                    href="{{ url_for('listings', listings_file=listings_file, index=index-1) }}"
+                    class="button has-text-weight-bold is-light is-size-5 is-fullwidth"
+                    >👈 Previous</a
+                  >
+                </div>
+                <div class="column">
+                  <a href="#" class="button is-fullwidth">TODO GOTO</a>
+                </div>
+                <div class="column">
+                  <a
+                    href="{{ url_for('listings', listings_file=listings_file, index=index+1) }}"
+                    class="button has-text-weight-bold is-light is-size-5 is-fullwidth"
+                    >Next 👉</a
+                  >
+                </div>
+              </div>
             </div>
             <div class="block">
               <a

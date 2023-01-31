@@ -70,4 +70,4 @@ def listings(listings_file: str, index: int):
     else:
         listing['minutes class'] = 'has-text-danger'
 
-    return render_template('listings.html', listings_file=listings_file.replace('_', ' '), index=index+1, total=len(dataset), listing=listing)
+    return render_template('listings.html', listings_file=listings_file, index=index, total=len(dataset), listing=listing)
