@@ -74,6 +74,16 @@
                 <div class="column"><b>Baths:</b></div>
                 <div class="column">{{ listing['baths'] }}</div>
               </div>
+              <div class="columns">
+                <div class="column is-one-quarter"><b>Year Built:</b></div>
+                <div class="column is-one-quarter">
+                  {{ listing['pretty built'] }}
+                </div>
+                {% if listing['hoa fee'] %}
+                <div class="column"><b>HOA:</b></div>
+                <div class="column">${{ listing['pretty hoa'] }}/month</div>
+                {% endif %}
+              </div>
               <hr />
               <div class="columns">
                 <div class="column"><b>Interior sqft:</b></div>

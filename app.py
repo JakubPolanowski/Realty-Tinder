@@ -57,6 +57,16 @@ def listings(listings_file: str, index: int):
         listing['pretty price'] = listing['price']
 
     try:
+        listing['pretty built'] = f"{listing['year built']:.0f}"
+    except TypeError:
+        listing['pretty built'] = listing['year built']
+
+    try:
+        listing['pretty hoa'] = f"{listing['hoa fee']:,.0f}"
+    except TypeError:
+        listing['pretty hoa'] = listing['hoa fee']
+
+    try:
         listing['pretty sqft'] = f"{listing['interior sqft']:,.0f}"
     except TypeError:
         listing['pretty sqft'] = listing['interior sqft']
