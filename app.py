@@ -71,8 +71,19 @@ def listings(listings_file: str, index: int):
                         index=int(form['page'])-1)
             )
 
-        if 'feedback' in form:  # TODO
-            return render_template('error.html', error=404, subtitle=form['feedback']), 404
+        if 'feedback' in form:
+            if 'feedback' not in session:
+                session['feedback'] = {}
+            if form['filename'] not in session['feedback']:
+                session['feedback'][form['filename']] = {}
+
+            feedback = session['feedback'][form['filename']]
+            feedback[int(form['index'])] = form['feedback']
+
+            return redirect(
+                url_for(
+                    'listings', listings_file=form['filename'], index=int(form['index'])+1)
+            )
 
         else:
             return render_template('error.html', error=400, subtitle="Invalid form POST"), 400
@@ -97,6 +108,11 @@ def listings(listings_file: str, index: int):
 
         # special values
         listing = helpers.listing.prepare_special_values(listing)
+
+        # added feedback to listing if exists
+        listing['feedback'] = session.get('feedback', {})\
+            .get(listings_file, {})\
+            .get(index)
 
         # images
         images = helpers.listing.get_images_from_realtor(listing['url'])
