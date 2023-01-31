@@ -38,11 +38,16 @@ def listings(listings_file: str, index: int):
     if request.method == "POST":
         form = request.form
 
+        print(form.keys())
+
         if 'page' in form:
             return redirect(
                 url_for('listings', listings_file=listings_file,
                         index=int(form['page'])-1)
             )
+
+        if 'feedback' in form:  # TODO
+            return render_template('404.html', subtitle=form['feedback']), 404
 
         else:  # TODO pick proper error code
             return render_template('404.html', subtitle="Invalid form POST"), 404
