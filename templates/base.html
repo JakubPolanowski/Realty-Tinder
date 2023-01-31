@@ -11,13 +11,37 @@
     <title>Realty Tinder</title>
   </head>
   <body>
-    <nav
-      class="navbar is-size-3"
-      role="navigation"
-      aria-label="main navigation"
-    >
-      <div class="navbar-brand">
-        <a href="/" class="navbar-item"> <b>Home</b> </a>
+    <nav class="navbar is-primary is-size-3" role="navigation" aria-label="main navigation">
+    
+      <div class="navbar-menu">
+        <div class="navbar-start has-text-weight-bold ">
+          <a class="navbar-item" href="/">
+            Home
+          </a>
+    
+        </div>
+        <div class="navbar-end">
+          <div class="navbar-item">
+
+            <form action="{{ url_for('login') }}" method="POST">
+              <div class="field has-addons">
+                <div class="control">
+                  <input class="input" type="text" name="user" placeholder="Username" {% if user is not none %}value="{{ user }}"{% endif %} required>
+                </div>
+                <div class="control">
+                  <button class="button is-primary is-light" type="submit">
+                    {% if user is not none %}
+                      Change User
+                    {% else %}
+                      Login
+                    {% endif %}
+                  </button>
+                </div>
+              </div>
+            </form>
+            
+          </div>
+        </div>
       </div>
     </nav>
 
