@@ -42,7 +42,26 @@
                   >
                 </div>
                 <div class="column">
-                  <a href="#" class="button is-fullwidth">TODO GOTO</a>
+                  <form method="POST">
+                    <div class="field has-addons">
+                      <div class="control is-fullwidth">
+                        <input
+                          class="input is-size-5"
+                          type="number"
+                          name="page"
+                          placeholder="Page"
+                        />
+                      </div>
+                      <div class="control">
+                        <button
+                          type="submit"
+                          class="button is-outlined has-background-light is-size-5"
+                        >
+                          Go ⭐
+                        </button>
+                      </div>
+                    </div>
+                  </form>
                 </div>
                 <div class="column">
                   <a
@@ -58,7 +77,7 @@
                 href="{{ listing['url'] }}"
                 target="_blank"
                 class="button is-link is-size-5 is-fullwidth has-text-weight-bold"
-                >See on Realtor.com</a
+                >🔍 See on Realtor.com</a
               >
             </div>
             <div class="block">
