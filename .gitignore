@@ -161,3 +161,4 @@ cython_debug/
 
 # using data folder instead of database, ignore folder in git
 data/
+flask_session/
