@@ -79,7 +79,7 @@ def get_images_from_realtor(listing_url: str) -> List[str]:
 
         photos = ndata['props']['pageProps']['initialState']['propertyDetails']['home_photos']['collection']
         photos = [re.sub(r's\.jpg$', 'od-w1024_h768_x2_var-A2.webp',
-                         photo['href']) for photo in photos]
+                         photo['href']) for photo in photos if isinstance(photo['href'], str)]
 
         return photos
 
