@@ -45,6 +45,9 @@ def listings(listings_file: str, index: int):
         session['listings'] = df.to_json(orient='records')
 
     dataset = json.loads(session['listings'])
+    if index >= len(dataset):
+        return render_template('404.html', subtitle=f'Out of bounds! There are only {len(dataset)} listing(s), {index+1} is invalid.'), 404
+
     listing = dataset[index]
 
     # special values
