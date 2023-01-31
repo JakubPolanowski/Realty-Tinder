@@ -83,4 +83,5 @@ def listings(listings_file: str, index: int):
     else:
         listing['minutes class'] = 'has-text-danger'
 
+    # render
     return render_template('listings.html', listings_file=listings_file, index=index, total=len(dataset), listing=listing)
