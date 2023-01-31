@@ -50,7 +50,21 @@ def listings(listings_file: str, index: int):
     # special values
     listing['pretty price'] = f"{listing['price']:,}"
     listing['pretty sqft'] = f"{listing['interior sqft']:,.0f}"
-    listing['price per sqft'] = f"{listing['price']/listing['interior sqft']:,.2f}"
-    listing['pretty acres'] = f"{listing['lot sqft']/43560:,.2f}"
+    try:
+        listing['price per sqft'] = f"{listing['price']/listing['interior sqft']:,.2f}"
+    except TypeError:
+        listing['price per sqft'] = ""
+    try:
+        listing['pretty acres'] = f"{listing['lot sqft']/43560:,.2f}"
+    except TypeError:
+        listing['pretty acres'] = ""
+    listing['pretty minutes'] = f"{listing['Minutes to Work']:,.0f}"
+
+    if listing['Minutes to Work'] <= 15:
+        listing['minutes class'] = "has-text-success"
+    elif listing['Minutes to Work'] <= 25:
+        listing['minutes class'] = 'has-text-warning'
+    else:
+        listing['minutes class'] = 'has-text-danger'
 
     return render_template('listings.html', listings_file=listings_file.replace('_', ' '), index=index+1, total=len(dataset), listing=listing)

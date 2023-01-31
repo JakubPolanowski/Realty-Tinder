@@ -8,8 +8,20 @@
           <p class="card-header-title">{{ listings_file }}</p>
         </div>
         <div class="card-content">
-          <p class="title">{{ listing['address'] }}</p>
-          <p class="subtitle">{{ index }} of {{ total }}</p>
+          <div class="container">
+            <div class="title columns">
+              <div class="column is-narrow">
+                <p>{{ listing['address'] }}</p>
+              </div>
+              <div class="column">
+                <p class="{{ listing['minutes class'] }}">
+                  {{ listing['pretty minutes'] }} Minutes to Work
+                </p>
+              </div>
+            </div>
+
+            <p class="subtitle">{{ index }} of {{ total }}</p>
+          </div>
           <div class="content">
             <div class="block">
               <figure class="image">
