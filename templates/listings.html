@@ -40,8 +40,12 @@
               <div class="columns">
                 <div class="column">
                   <a
-                    href="{{ url_for('listings', listings_file=listings_file, index=index-1) }}"
                     class="button has-text-weight-bold is-light is-size-5 is-fullwidth"
+                    {% if index < 1 %}
+                      disabled
+                    {% else %}
+                      href="{{ url_for('listings', listings_file=listings_file, index=index-1) }}"
+                    {% endif %}
                     >👈 Previous</a
                   >
                 </div>
@@ -69,8 +73,12 @@
                 </div>
                 <div class="column">
                   <a
-                    href="{{ url_for('listings', listings_file=listings_file, index=index+1) }}"
                     class="button has-text-weight-bold is-light is-size-5 is-fullwidth"
+                    {% if index+1 >= total %}
+                      disabled
+                    {% else %}
+                      href="{{ url_for('listings', listings_file=listings_file, index=index+1) }}"
+                    {% endif %}
                     >Next 👉</a
                   >
                 </div>
@@ -135,7 +143,6 @@
               </div>
             </div>
           </div>
-          {# TODO #}
         </div>
         <div class="card-footer">
           {# TODO IMPLEMENT LOGIC #}
