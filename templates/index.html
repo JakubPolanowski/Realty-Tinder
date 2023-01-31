@@ -8,7 +8,9 @@
       </button>
     </div>
     <div class="block">
-      <div class="box">#TODO list all current spreadsheets here {# TODO #}</div>
+      {% for file in files %}
+      <button class="button is-fullwidth is-link">{{ file[0] }}</button>
+      {% endfor %}
     </div>
   </div>
 </section>
