@@ -84,4 +84,4 @@ def get_images_from_realtor(listing_url: str) -> List[str]:
         return photos
 
     except:
-        return []
+        return ["https://bulma.io/images/placeholders/1280x960.png"]
