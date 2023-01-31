@@ -8,7 +8,8 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     files = glob("data/listings/*.xlsx")
-    files = [(p.stem.replace('_', ' '), p) for p in [Path(f) for f in files]]
+    files = [(p.stem.replace('_', ' '), p.stem)
+             for p in [Path(f) for f in files]]
     return render_template('index.html', files=files)
 
 

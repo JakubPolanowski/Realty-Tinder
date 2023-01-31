@@ -9,7 +9,9 @@
     </div>
     <div class="block">
       {% for file in files %}
-      <button class="button is-fullwidth is-link">{{ file[0] }}</button>
+      <a href="/listings/{{ file[1]}}" class="button is-fullwidth is-link">
+        {{ file[0] }}
+      </a>
       {% endfor %}
     </div>
   </div>
