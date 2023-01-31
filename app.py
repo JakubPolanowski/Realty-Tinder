@@ -18,6 +18,11 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 
+@app.context_processor
+def inject_user():
+    return dict(user=session.get('user'))
+
+
 @app.route('/')
 def index():
     files = glob("data/listings/*.xlsx")
@@ -28,7 +33,20 @@ def index():
 
 @app.errorhandler(404)
 def error404(e):
-    return render_template('404.html'), 404
+    return render_template('error.html', error=404), 404
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+
+    if request.method == "POST":
+
+        # session['user'] =
+        return render_template('error.html', error=404, subtitle=request.form)
+
+    else:
+        # TODO
+        return render_template('error.html', error=404, subtitle="login page not implemented"), 404
 
 
 @app.route('/listings/<string:listings_file>', defaults={'index': 0}, methods=["GET", "POST"])
@@ -47,15 +65,15 @@ def listings(listings_file: str, index: int):
             )
 
         if 'feedback' in form:  # TODO
-            return render_template('404.html', subtitle=form['feedback']), 404
+            return render_template('error.html', error=404, subtitle=form['feedback']), 404
 
-        else:  # TODO pick proper error code
-            return render_template('404.html', subtitle="Invalid form POST"), 404
+        else:
+            return render_template('error.html', error=400, subtitle="Invalid form POST"), 400
 
     else:
 
         if not (listing_path := Path(f"data/listings/{listings_file}.xlsx")).exists():
-            return render_template('404.html', subtitle='The listings file does not exist'), 404
+            return render_template('error.html', error=404, subtitle='The listings file does not exist'), 404
 
         if session.get('listings_file') != listings_file:
             df = pd.read_excel(listing_path)
@@ -66,7 +84,7 @@ def listings(listings_file: str, index: int):
 
         dataset = json.loads(session['listings'])
         if index >= len(dataset):
-            return render_template('404.html', subtitle=f'Out of bounds! There are only {len(dataset)} listing(s), {index+1} is invalid.'), 404
+            return render_template('error.html', error=404, subtitle=f'Out of bounds! There are only {len(dataset)} listing(s), {index+1} is invalid.'), 404
 
         listing = dataset[index]
 
