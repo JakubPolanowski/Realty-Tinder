@@ -33,10 +33,12 @@ def error404(e):
 @app.route('/listings/<string:listings_file>/<int:index>')
 def listings(listings_file: str, index: int):
 
-    session['listings_file'] = listings_file
     if not (listing_path := Path(f"data/listings/{listings_file}.xlsx")).exists():
         return render_template('404.html', subtitle='The listings file does not exist'), 404
-    session['listings'] = pd.read_excel(
-        listing_path).to_json(orient='records')
+
+    if session.get('listings_file') != listings_file:
+        session['listings_file'] = listings_file
+        session['listings'] = pd.read_excel(
+            listing_path).to_json(orient='records')
 
     return render_template('listings.html', listings_file=listings_file)
