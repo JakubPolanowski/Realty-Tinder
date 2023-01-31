@@ -145,21 +145,31 @@
           </div>
         </div>
         <div class="card-footer">
-          {# TODO IMPLEMENT LOGIC #}
-          <a
-            href="#"
-            class="card-footer-item is-size-3 has-text-weight-bold has-text-white has-background-danger"
-            >😡 Hate</a
+          <form method="POST" id="form-listing-feedback">
+          </form>
+          <button
+            form="form-listing-feedback"
+            type="submit"
+            name="feedback"
+            value="Hate"
+            class="button card-footer-item is-size-3 has-text-weight-bold has-text-white has-background-danger"
+            >😡 Hate</button
           >
-          <a
-            href="#"
-            class="card-footer-item is-size-3 has-text-weight-bold has-text-white has-background-info"
-            >😐 Ok</a
+          <button
+            form="form-listing-feedback"
+            type="submit"
+            name="feedback"
+            value="Ok"
+            class="button card-footer-item is-size-3 has-text-weight-bold has-text-white has-background-info"
+            >😐 Ok</button
           >
-          <a
-            href="#"
-            class="card-footer-item is-size-3 has-text-weight-bold has-text-white has-background-success"
-            >😍 Love</a
+          <button
+            form="form-listing-feedback"
+            type="submit"
+            name="feedback"
+            value="Love"
+            class="button card-footer-item is-size-3 has-text-weight-bold has-text-white has-background-success"
+            >😍 Love</button
           >
         </div>
       </div>
