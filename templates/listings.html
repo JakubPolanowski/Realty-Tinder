@@ -88,7 +88,11 @@
                 <div class="column">{{ listing['beds'] }}</div>
               </div>
               <div class="columns">
-                <div class="column"><b>List Date:</b></div>
+                <div
+                  class="column {% if 'new listing' in listing['flags'] %}notification is-info{% endif %}"
+                >
+                  <b>List Date:</b>
+                </div>
                 <div class="column">{{ listing['list date'] }}</div>
                 <div class="column"><b>Baths:</b></div>
                 <div class="column">{{ listing['baths'] }}</div>
@@ -99,17 +103,25 @@
                   {{ listing['pretty built'] }}
                 </div>
                 {% if listing['hoa fee'] %}
-                <div class="column"><b>HOA:</b></div>
+                <div class="column notification is-warning"><b>HOA:</b></div>
                 <div class="column">${{ listing['pretty hoa'] }}/month</div>
                 {% endif %}
               </div>
               <hr />
               <div class="columns">
-                <div class="column"><b>Interior sqft:</b></div>
+                <div
+                  class="column {% if listing['interior sqft'] > 2000 %}notification is-success{% endif %}{% if listing['interior sqft'] < 1000 %}notification is-danger{% endif %}"
+                >
+                  <b>Interior sqft:</b>
+                </div>
                 <div class="column">{{ listing['pretty sqft'] }}</div>
                 <div class="column"><b>Price per sqft:</b></div>
                 <div class="column">${{ listing['price per sqft'] }}</div>
-                <div class="column"><b>Acres:</b></div>
+                <div
+                  class="column {% if listing['acres'] > 1.0 %}notification is-success{% endif %}{% if listing['acres'] < 0.25 %}notification is-danger{% endif %}"
+                >
+                  <b>Acres:</b>
+                </div>
                 <div class="column">{{ listing['pretty acres'] }}</div>
               </div>
               <hr />

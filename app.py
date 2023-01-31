@@ -91,8 +91,10 @@ def listings(listings_file: str, index: int):
             listing['price per sqft'] = ""
 
         try:
-            listing['pretty acres'] = f"{listing['lot sqft']/43560:,.2f}"
+            listing['acres'] = listing['lot sqft']/43560
+            listing['pretty acres'] = f"{listing['acres']:,.2f}"
         except TypeError:
+            listing['acres'] = 0
             listing['pretty acres'] = ""
 
         try:
@@ -106,6 +108,9 @@ def listings(listings_file: str, index: int):
             listing['minutes class'] = 'has-text-warning'
         else:
             listing['minutes class'] = 'has-text-danger'
+
+        if listing['flags'] is None:
+            listing['flags'] = ""
 
         # render
         return render_template('listings.html', listings_file=listings_file, index=index, total=len(dataset), listing=listing)
