@@ -4,6 +4,7 @@ from glob import glob
 from pathlib import Path
 import uuid
 import pandas as pd
+import json
 
 app = Flask(__name__)
 
@@ -37,8 +38,19 @@ def listings(listings_file: str, index: int):
         return render_template('404.html', subtitle='The listings file does not exist'), 404
 
     if session.get('listings_file') != listings_file:
-        session['listings_file'] = listings_file
-        session['listings'] = pd.read_excel(
-            listing_path).to_json(orient='records')
+        df = pd.read_excel(listing_path)
+        df['list date'] = df['list date'].dt.strftime('%m/%d/%Y')
 
-    return render_template('listings.html', listings_file=listings_file)
+        session['listings_file'] = listings_file
+        session['listings'] = df.to_json(orient='records')
+
+    dataset = json.loads(session['listings'])
+    listing = dataset[index]
+
+    # special values
+    listing['pretty price'] = f"{listing['price']:,}"
+    listing['pretty sqft'] = f"{listing['interior sqft']:,.0f}"
+    listing['price per sqft'] = f"{listing['price']/listing['interior sqft']:,.2f}"
+    listing['pretty acres'] = f"{listing['lot sqft']/43560:,.2f}"
+
+    return render_template('listings.html', listings_file=listings_file.replace('_', ' '), index=index+1, total=len(dataset), listing=listing)

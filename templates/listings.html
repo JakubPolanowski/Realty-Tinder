@@ -2,7 +2,71 @@
 
 <section class="section">
   <div class="container">
-    <div class="block">#TODO</div>
+    <div class="block">
+      <div class="card">
+        <div class="card-header">
+          <p class="card-header-title">{{ listings_file }}</p>
+        </div>
+        <div class="card-content">
+          <p class="title">{{ listing['address'] }}</p>
+          <p class="subtitle">{{ index }} of {{ total }}</p>
+          <div class="content">
+            <div class="block">
+              <figure class="image">
+                <img
+                  style="max-height: 500px; width: auto; height: auto"
+                  src="https://bulma.io/images/placeholders/1280x960.png"
+                  alt="Placeholder image"
+                />
+              </figure>
+            </div>
+            <div class="block">
+              <a
+                href="{{ listing['url'] }}"
+                target="_blank"
+                class="button is-link is-fullwidth"
+                >See on Realtor.com</a
+              >
+            </div>
+            <div class="block">
+              <div class="columns">
+                <div class="column"><b>Price:</b></div>
+                <div class="column">${{ listing['pretty price'] }}</div>
+                <div class="column"><b>Beds:</b></div>
+                <div class="column">{{ listing['beds'] }}</div>
+              </div>
+              <div class="columns">
+                <div class="column"><b>List Date:</b></div>
+                <div class="column">{{ listing['list date'] }}</div>
+                <div class="column"><b>Baths:</b></div>
+                <div class="column">{{ listing['baths'] }}</div>
+              </div>
+              <hr />
+              <div class="columns">
+                <div class="column"><b>Interior sqft:</b></div>
+                <div class="column">{{ listing['pretty sqft'] }}</div>
+                <div class="column"><b>Price per sqft:</b></div>
+                <div class="column">${{ listing['price per sqft'] }}</div>
+                <div class="column"><b>Acres:</b></div>
+                <div class="column">{{ listing['pretty acres'] }}</div>
+              </div>
+              <hr />
+              <div class="columns">
+                <div class="column is-one-third"><b>Flags:</b></div>
+                <div class="column">{{ listing['flags'] }}</div>
+              </div>
+            </div>
+          </div>
+          {# TODO #}
+        </div>
+        <div class="card-footer">
+          {# TODO IMPLEMENT LOGIC #}
+          <a href="#" class="card-footer-item">Hate</a>
+          <a href="#" class="card-footer-item">Ok</a>
+          <a href="#" class="card-footer-item">Love</a>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 {% endblock %}
