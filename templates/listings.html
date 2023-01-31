@@ -8,7 +8,7 @@
           <p class="card-header-title">{{ listings_file|replace("_", " ") }}</p>
         </div>
         <div class="card-content">
-          <div class="container">
+          <div class="block">
             <div class="title columns">
               <div class="column is-narrow">
                 <p>{{ listing['address'] }}</p>
@@ -27,7 +27,7 @@
               <figure class="image">
                 <img
                   style="max-height: 500px; width: auto; height: auto"
-                  src="https://bulma.io/images/placeholders/1280x960.png"
+                  src="{{ images[0] }}"
                   alt="Placeholder image"
                 />
               </figure>

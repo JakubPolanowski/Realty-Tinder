@@ -1,4 +1,8 @@
-from typing import Dict, Any
+from typing import Dict, List, Any
+from bs4 import BeautifulSoup
+import requests
+import json
+import re
 
 
 def prepare_special_values(listing: Dict[str, Any]):
@@ -50,3 +54,34 @@ def prepare_special_values(listing: Dict[str, Any]):
         listing['flags'] = ""
 
     return listing
+
+
+def get_images_from_realtor(listing_url: str) -> List[str]:
+
+    HEADER = {
+        "authority": "www.realtor.com",
+        "accept": "*/*",
+        "accept-language": "en-US,en;q=0.9",
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-origin",
+        "sec-gpc": "1",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36"
+    }
+
+    # TODO add some error handling if get response other than 200
+    response = requests.get(listing_url, headers=HEADER)
+
+    try:
+        soup = BeautifulSoup(response.content, 'html.parser')
+        ndata = soup.find("script", id="__NEXT_DATA__").text
+        ndata = json.loads(ndata)
+
+        photos = ndata['props']['pageProps']['initialState']['propertyDetails']['home_photos']['collection']
+        photos = [re.sub(r's\.jpg$', 'od-w1024_h768_x2_var-A2.webp',
+                         photo['href']) for photo in photos]
+
+        return photos
+
+    except:
+        return []

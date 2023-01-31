@@ -68,5 +68,8 @@ def listings(listings_file: str, index: int):
         # special values
         listing = helpers.listing.prepare_special_values(listing)
 
+        # images
+        images = helpers.listing.get_images_from_realtor(listing['url'])
+
         # render
-        return render_template('listings.html', listings_file=listings_file, index=index, total=len(dataset), listing=listing)
+        return render_template('listings.html', listings_file=listings_file, index=index, total=len(dataset), listing=listing, images=images)
