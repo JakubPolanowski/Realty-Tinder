@@ -25,6 +25,9 @@
 
             <form action="{{ url_for('login') }}" method="POST">
               <div class="field has-addons">
+                <div class="is-hidden">
+                  <input type="text" class="input" name="current_page" value="{{ request.path }}">
+                </div>
                 <div class="control">
                   <input class="input" type="text" name="user" placeholder="Username" {% if user is not none %}value="{{ user }}"{% endif %} required>
                 </div>

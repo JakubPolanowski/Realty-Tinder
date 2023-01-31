@@ -6,6 +6,7 @@ import uuid
 import pandas as pd
 import json
 import helpers
+import re
 
 app = Flask(__name__)
 
@@ -41,12 +42,18 @@ def login():
 
     if request.method == "POST":
 
-        # session['user'] =
-        return render_template('error.html', error=404, subtitle=request.form)
+        form = request.form
+
+        if 'user' not in form:
+            return render_template('error.html', error=400, subtitle="Bad request, user is required")
+        if not re.match(r'^(?=.{3,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$', str(form['user'])):
+            return render_template('error.html', error=400, subtitle="Invalid username. Should be 3-20 characters long, alpha numeric")
+        else:
+            session['user'] = form['user']
+            return redirect(form['current_page'])
 
     else:
-        # TODO
-        return render_template('error.html', error=404, subtitle="login page not implemented"), 404
+        return render_template('error.html', error=501, subtitle="dedicated login page not implemented"), 501
 
 
 @app.route('/listings/<string:listings_file>', defaults={'index': 0}, methods=["GET", "POST"])
