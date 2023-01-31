@@ -1,1 +1,1 @@
-from . import listings
+from . import listing

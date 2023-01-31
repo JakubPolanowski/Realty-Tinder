@@ -66,7 +66,7 @@ def listings(listings_file: str, index: int):
         listing = dataset[index]
 
         # special values
-        listing = helpers.listings.prepare_special_values(listing)
+        listing = helpers.listing.prepare_special_values(listing)
 
         # render
         return render_template('listings.html', listings_file=listings_file, index=index, total=len(dataset), listing=listing)
