@@ -7,6 +7,14 @@
       <div class="card">
         <div class="card-header">
           <p class="card-header-title">{{ listings_file|replace("_", " ") }}</p>
+          <div class="field is-grouped">
+            <div class="control">
+              <button class="button has-text-weight-bold is-size-5 is-danger js-gallery-modal-trigger" data-target="modal-clear">CLEAR</button>
+            </div>
+            <div class="control"> {# TODO make this POST #}
+              <button class="button has-text-weight-bold is-size-5 is-success js-gallery-modal-trigger" data-target="modal-saved">SAVE</button>
+            </div>
+          </div>
         </div>
         <div class="card-content">
           <div class="block">
@@ -187,6 +195,63 @@
   <button class="modal-close is-large" aria-label="close"></button>
 </div>
 
+<div id="modal-saved" class="modal client-modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Saved!</p>
+      <button class="delete" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body is-size-5">
+     <p>Feedbacks for this listing have been saved. You can see them under 'Ratings'</p>
+    </section>
+    <footer class="modal-card-foot">
+      <div class="field is-grouped">
+
+        <div class="control">
+         <button class="button has-text-weight-bold is-primary is-size-5">Ok</button>
+        </div>
+        <div class="control">
+          <a href="{{ url_for('ratings') }}" class="button has-text-weight-bold is-link is-size-5">Open Ratings</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+
+<div id="modal-clear" class="modal client-modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Are You Sure?</p>
+      <button class="delete" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body is-size-5">
+      <p>Are you sure you wanted clear your cached feedback for this listing set? <b>This CANNOT be undone.</b></p>
+    </section>
+    <footer class="modal-card-foot">
+      <div class="field is-grouped">
+
+        <div class="control">
+          <form method="POST">
+                <button
+                  type="submit"
+                  name="clear"
+                  value="clear-feedback"
+                  class="button has-text-weight-bold is-danger is-size-5"
+                >
+                  CLEAR
+                </button>
+          </form>
+        </div>
+        <div class="control">
+          <button class="button has-text-weight-bold is-primary is-size-5">Cancel</button>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+
 <div id="modal-no-feedback" class="modal client-modal">
   <div class="modal-background"></div>
   <div class="modal-card">
@@ -194,7 +259,7 @@
       <p class="modal-card-title">Pages Without Feedback</p>
       <button class="delete" aria-label="close"></button>
     </header>
-    <section class="modal-card-body"> {# TODO #}
+    <section class="modal-card-body">
       <form method="POST">
         <div class="field has-addons">
           <div class="control is-fullwidth is-size-4">
@@ -209,7 +274,7 @@
           <div class="control">
             <button
               type="submit"
-              class="button is-outlined has-background-light is-size-4"
+              class="button is-size-4 is-primary is-light is-outlined"
             >
               Go ⭐
             </button>
