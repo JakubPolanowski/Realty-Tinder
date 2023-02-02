@@ -18,7 +18,17 @@
           <a class="navbar-item" href="/">
             Home
           </a>
-    
+          <a class="navbar-item" href="/explore">
+            Explore
+          </a>
+          <a class="navbar-item" href="/ratings">
+            Ratings
+          </a>
+          {% if superuser %}
+          <a class="navbar-item" href="/admin">
+            Admin
+          </a>
+          {% endif %}
         </div>
         <div class="navbar-end">
           <div class="navbar-item">

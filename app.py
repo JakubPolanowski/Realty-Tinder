@@ -64,6 +64,30 @@ def login():
         return render_template('error.html', error=501, subtitle="dedicated login page not implemented"), 501
 
 
+@app.route('/explore')
+def explore():
+
+    # TODO
+    return render_template('error.html', error=501, subtitle="not implemented"), 501
+
+
+@app.route('/ratings')
+def ratings():
+
+    # TODO
+    return render_template('error.html', error=501, subtitle="not implemented"), 501
+
+
+@app.route('/admin')
+def admin():
+
+    if session.get('user') != SUPERUSER:
+        return render_template('error.html', error=404), 404
+
+    # TODO
+    return render_template('error.html', error=501, subtitle="not implemented"), 501
+
+
 @app.route('/listings/<string:listings_file>', defaults={'index': 0}, methods=["GET", "POST"])
 @app.route('/listings/<string:listings_file>/<int:index>', methods=["GET", "POST"])
 def listings(listings_file: str, index: int):
