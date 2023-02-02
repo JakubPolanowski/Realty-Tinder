@@ -130,6 +130,14 @@ def listings(listings_file: str, index: int):
                     'listings', listings_file=form['filename'], index=int(form['index']))
             )
 
+        if 'save' in form:
+            # TODO
+
+            return redirect(
+                url_for(
+                    'listings', listings_file=form['filename'], index=int(form['index']), just_saved=True)
+            )
+
         else:
             return render_template('error.html', error=400, subtitle="Invalid form POST"), 400
 

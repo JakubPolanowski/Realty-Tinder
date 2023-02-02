@@ -14,7 +14,8 @@
             <div class="control"> 
               <form method="POST">
                 <div class="is-hidden">
-                  <input type="text" class="input" name="current_page" value="{{ request.path }}">
+                  <input type="text" class="is-hidden" name="filename" value={{ listings_file }}>
+                  <input type="text" class="is-hidden" name="index" value={{ index }}>
                 </div>
                 <button
                   type="submit"
@@ -207,8 +208,8 @@
   <button class="modal-close is-large" aria-label="close"></button>
 </div>
 
-{% if just_saved %}
-<div id="modal-saved" class="modal client-modal">
+{% if request.args.get('just_saved') %}
+<div id="modal-saved" class="modal client-modal is-active">
   <div class="modal-background"></div>
   <div class="modal-card">
     <header class="modal-card-head">
