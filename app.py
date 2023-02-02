@@ -37,7 +37,7 @@ def index():
     files = glob("data/listings/*.xlsx")
     files = [(p.stem.replace('_', ' '), p.stem)
              for p in [Path(f) for f in files]]
-    return render_template('index.html', files=files)
+    return render_template('explore.html', files=files)
 
 
 @app.errorhandler(404)
@@ -67,8 +67,10 @@ def login():
 @app.route('/explore')
 def explore():
 
-    # TODO
-    return render_template('error.html', error=501, subtitle="not implemented"), 501
+    files = glob("data/listings/*.xlsx")
+    files = [(p.stem.replace('_', ' '), p.stem)
+             for p in [Path(f) for f in files]]
+    return render_template('explore.html', files=files)
 
 
 @app.route('/ratings')
