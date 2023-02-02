@@ -4,8 +4,8 @@
   <div class="container">
     {% for file in files %}
     <div class="block">
-      <a href="/listings/{{ file[1]}}" class="button is-fullwidth is-link">
-        {{ file[0] }}
+      <a href="/listings/{{ file[1]}}" class="button is-fullwidth is-link is-size-4">
+        <b>{{ file[0] }}</b>
       </a>
     </div>
     {% endfor %}
