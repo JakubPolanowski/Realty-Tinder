@@ -94,7 +94,7 @@ def admin():
 @app.route('/listings/<string:listings_file>/<int:index>', methods=["GET", "POST"])
 def listings(listings_file: str, index: int):
 
-    if request.method == "POST":
+    if request.method == "POST":  # TODO handle clear POST and save POST
         form = request.form
 
         print(form.keys())
