@@ -11,8 +11,20 @@
             <div class="control">
               <button class="button has-text-weight-bold is-size-5 is-danger js-gallery-modal-trigger" data-target="modal-clear">CLEAR</button>
             </div>
-            <div class="control"> {# TODO make this POST #}
-              <button class="button has-text-weight-bold is-size-5 is-success js-gallery-modal-trigger" data-target="modal-saved">SAVE</button>
+            <div class="control"> 
+              <form method="POST">
+                <div class="is-hidden">
+                  <input type="text" class="input" name="current_page" value="{{ request.path }}">
+                </div>
+                <button
+                  type="submit"
+                  name="save"
+                  value="save-feedback"
+                  class="button has-text-weight-bold is-success is-size-5"
+                >
+                  SAVE
+                </button>
+              </form>
             </div>
           </div>
         </div>
@@ -195,6 +207,7 @@
   <button class="modal-close is-large" aria-label="close"></button>
 </div>
 
+{% if just_saved %}
 <div id="modal-saved" class="modal client-modal">
   <div class="modal-background"></div>
   <div class="modal-card">
@@ -218,6 +231,7 @@
     </footer>
   </div>
 </div>
+{% endif %}
 
 <div id="modal-clear" class="modal client-modal">
   <div class="modal-background"></div>
