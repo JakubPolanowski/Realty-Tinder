@@ -112,6 +112,18 @@ def ratings():
     return render_template('ratings.html', ratings=ratings, stats=stats)
 
 
+@app.route('/ratings/download')
+def download_ratings():
+    # TODO
+    return render_template('error.html', error=501, subtitle="not implemented"), 501
+
+
+@app.route('/ratings/view')
+def view_ratings():
+    #    TODO
+    return render_template('error.html', error=501, subtitle="not implemented"), 501
+
+
 @app.route('/admin')
 def admin():
 
