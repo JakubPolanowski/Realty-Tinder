@@ -150,8 +150,12 @@ def listings(listings_file: str, index: int):
             .get(listings_file, {})\
             .get(index)
 
+        # not yet rated
+        not_rated = set(range(len(dataset))) - \
+            set(session['feedback'][listings_file].keys())
+
         # images images are now pre extracted
         # images = helpers.listing.get_images_from_realtor(listing['url'])
 
         # render
-        return render_template('listings.html', listings_file=listings_file, index=index, total=len(dataset), listing=listing, images=listing['photos'])
+        return render_template('listings.html', listings_file=listings_file, index=index, total=len(dataset), not_rated=not_rated, listing=listing, images=listing['photos'])

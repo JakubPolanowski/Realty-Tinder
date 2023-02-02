@@ -21,7 +21,7 @@
               </div>
             </div>
 
-            <p class="subtitle">{{ index +1 }} of {{ total }}</p>
+            <p class="subtitle">{{ index +1 }} of {{ total }} &nbsp;&nbsp;&nbsp; <a class="js-gallery-modal-trigger" data-target="modal-no-feedback">{{ not_rated|length }} Without Feedback</a></p>
           </div>
           <div class="content">
             <div class="block">
@@ -187,6 +187,39 @@
   <button class="modal-close is-large" aria-label="close"></button>
 </div>
 
+<div id="modal-no-feedback" class="modal client-modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Pages Without Feedback</p>
+      <button class="delete" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body"> {# TODO #}
+      <form method="POST">
+        <div class="field has-addons">
+          <div class="control is-fullwidth is-size-4">
+            <div class="select">
+              <select name="page">
+                {% for nr in not_rated %}
+                  <option>{{ nr+1 }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="control">
+            <button
+              type="submit"
+              class="button is-outlined has-background-light is-size-4"
+            >
+              Go ⭐
+            </button>
+          </div>
+        </div>
+      </form>
+    </section>
+  </div>
+</div>
+
 {% if user is none %}
 <div class="modal server-modal is-active">
   <div class="modal-background"></div>
@@ -211,12 +244,10 @@
         </div>
       </form>
     </section>
-
   </div>
 </div>
 {% endif %}
 
-{# TODO make extraction async #}
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     // Functions to open and close a modal
