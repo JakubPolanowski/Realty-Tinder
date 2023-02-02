@@ -36,8 +36,8 @@
             <td>{{ listing_ratings['Love'] }}</td>
             <td>{{ listing_ratings['Total'] }}</td>
             <td>{{ listing_ratings['Listings'] }}</td>
-            <td><a href="#">View</a></td> {# TODO #}
-            <td><a href="#">Download</a></td> {# TODO #}
+            <td><a href="{{ url_for('view_ratings', usr=usr, listing=listing) }}">View</a></td>
+            <td><a href="{{ url_for('download_ratings', usr=usr, listing=listing) }}">Download</a></td>
             </tr>
             
             <br>{{ usr }} {{ listing }} {{ listing_ratings['Hate'] }}
