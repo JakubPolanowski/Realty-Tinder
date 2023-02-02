@@ -131,7 +131,16 @@ def listings(listings_file: str, index: int):
             )
 
         if 'save' in form:
-            # TODO
+
+            if not isinstance(session.get('user'), str):
+                return render_template('error.html', error=400, subtitle="Invalid form POST, invalid user/user not logged in"), 400
+
+            save_path = Path('data', 'ratings',
+                             session['user'], f"{form['filename']}.json")
+            save_path.parent.mkdir(parents=True, exist_ok=True)
+
+            with open(save_path, 'w') as f:
+                json.dump(session['feedback'][form['filename']], f)
 
             return redirect(
                 url_for(
