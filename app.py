@@ -97,6 +97,8 @@ def listings(listings_file: str, index: int):
             df = pd.read_excel(listing_path)
             df['list date'] = df['list date'].dt.strftime('%m/%d/%Y')
 
+            df['photos'] = df['photos'].apply(json.loads)
+
             session['listings_file'] = listings_file
             session['listings'] = df.to_json(orient='records')
 
@@ -114,8 +116,8 @@ def listings(listings_file: str, index: int):
             .get(listings_file, {})\
             .get(index)
 
-        # images
-        images = helpers.listing.get_images_from_realtor(listing['url'])
+        # images images are now pre extracted
+        # images = helpers.listing.get_images_from_realtor(listing['url'])
 
         # render
-        return render_template('listings.html', listings_file=listings_file, index=index, total=len(dataset), listing=listing, images=images)
+        return render_template('listings.html', listings_file=listings_file, index=index, total=len(dataset), listing=listing, images=listing['photos'])
