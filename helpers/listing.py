@@ -43,6 +43,10 @@ def prepare_special_values(listing: Dict[str, Any]):
     except:
         listing['pretty minutes'] = listing['Minutes to Work']
 
+    if len(listing['photos']) < 1:
+        listing['photos'] = [
+            "https://bulma.io/images/placeholders/1280x960.png"]
+
     if listing['Minutes to Work'] <= 15:
         listing['minutes class'] = "has-text-success"
     elif listing['Minutes to Work'] <= 25:
