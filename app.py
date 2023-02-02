@@ -77,6 +77,7 @@ def explore():
 def ratings():
 
     ratings = {}
+    total = -1  # should be obvious if wrong
 
     ratings_path = Path('data', 'ratings')
 
@@ -91,13 +92,16 @@ def ratings():
                     with open(rating_file, 'r') as f:
                         ratings[usr_ratings.name][rating_file.stem] = json.load(
                             f)
+                        total = ratings[usr_ratings.name][rating_file.stem].pop(
+                            'total')
 
     stats = {}
     for usr, usr_ratings in ratings.items():
         stats[usr] = {}
         for file, file_ratings in usr_ratings.items():
             stats[usr][file] = {'Hate': 0, 'Ok': 0,
-                                'Love': 0, 'Total': len(file_ratings)}
+                                'Love': 0, 'Total': len(file_ratings),
+                                'Listings': total}
 
             for _, rating in file_ratings.items():
                 # better error handling if unexpected value could be used
@@ -141,6 +145,7 @@ def listings(listings_file: str, index: int):
 
             feedback = session['feedback'][form['filename']]
             feedback[int(form['index'])] = form['feedback']
+            feedback['total'] = form['total']
 
             return redirect(
                 url_for(
