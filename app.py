@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, request, redirect, url_for
+from flask import Flask, render_template, session, request, redirect, url_for, send_file
 from flask_session import Session
 from glob import glob
 from pathlib import Path
@@ -114,17 +114,39 @@ def ratings():
 
 @app.route('/ratings/download')
 def download_ratings():
-    # TODO
-    return render_template('error.html', error=501, subtitle="not implemented"), 501
+
+    if request.args.get('listing') is None or not (listing_path := Path('data', 'listings', f'{request.args.get("listing")}.xlsx')).exists():
+        return render_template('error.html', error=400, subtitle="Invalid listing file name"), 400
+
+    if request.args.get('usr') is None or not (ratings_path := Path('data', 'ratings', request.args.get('usr'), f'{request.args.get("listing")}.json')).exists():
+        return render_template('error.html', error=400, subtitle="Invalid user"), 400
+
+    df = pd.read_excel(listing_path)
+
+    with open(ratings_path, 'r') as f:
+        ratings = json.load(f)
+
+    ratings.pop('total')
+    ratings = {int(k): v for k, v in ratings.items()}
+
+    df['Rating'] = df.index.map(ratings)
+    df.drop(columns=['photos'], inplace=True)
+
+    temp_save_path = Path('temp', 'ratings_download.xlsx')
+    temp_save_path.parent.mkdir(parents=True, exist_ok=True)
+
+    df.to_excel(temp_save_path)
+
+    return send_file(temp_save_path)
 
 
-@app.route('/ratings/view')
+@ app.route('/ratings/view')
 def view_ratings():
     #    TODO
     return render_template('error.html', error=501, subtitle="not implemented"), 501
 
 
-@app.route('/admin')
+@ app.route('/admin')
 def admin():
 
     if session.get('user') != SUPERUSER:
@@ -134,8 +156,8 @@ def admin():
     return render_template('error.html', error=501, subtitle="not implemented"), 501
 
 
-@app.route('/listings/<string:listings_file>', defaults={'index': 0}, methods=["GET", "POST"])
-@app.route('/listings/<string:listings_file>/<int:index>', methods=["GET", "POST"])
+@ app.route('/listings/<string:listings_file>', defaults={'index': 0}, methods=["GET", "POST"])
+@ app.route('/listings/<string:listings_file>/<int:index>', methods=["GET", "POST"])
 def listings(listings_file: str, index: int):
 
     if request.method == "POST":
