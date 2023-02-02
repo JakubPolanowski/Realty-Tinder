@@ -73,7 +73,8 @@ def get_images_from_realtor(listing_url: str) -> List[str]:
         "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36"
     }
 
-    # TODO add some error handling if get response other than 200
+    # NO LONGER A TO-DO since obsolete (image urls are now prefetched)
+    # add some error handling if get response other than 200
     response = requests.get(listing_url, headers=HEADER)
 
     try:
