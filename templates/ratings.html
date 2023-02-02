@@ -1,18 +1,73 @@
 {% extends 'base.html' %} {% block content %}
 
-{{ ratings }}
-<br>
-{{ stats }}
+<link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.1/css/dataTables.bulma.min.css"
+    />
+
 
 <section class="section"> {# TODO #}
   <div class="container">
-    {% for file in files %}
     <div class="block">
-      <a href="/listings/{{ file[1]}}" class="button is-fullwidth is-link is-size-4">
-        <b>{{ file[0] }}</b>
-      </a>
+      <table id="ratings" class="table is-striped" style="width:100%">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Listing File</th>
+            <th>Hated</th>
+            <th>Ok</th>
+            <th>Loved</th>
+            <th>Total</th>
+            <th>View</th>
+            <th>Download</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          {% for usr, usr_ratings in stats.items() %}
+          {% for listing, listing_ratings in usr_ratings.items() %}
+          
+          <tr>
+            <td>{{ usr }}</td>
+            <td>{{ listing }}</td>
+            <td>{{ listing_ratings['Hate'] }}</td>
+            <td>{{ listing_ratings['Ok'] }}</td>
+            <td>{{ listing_ratings['Love'] }}</td>
+            <td>{{ listing_ratings['Total'] }}</td>
+            <td><a href="#">View</a></td> {# TODO #}
+            <td><a href="#">Download</a></td> {# TODO #}
+            </tr>
+            
+            <br>{{ usr }} {{ listing }} {{ listing_ratings['Hate'] }}
+            {% endfor %}
+          {% endfor %}
+
+        </tbody>
+        <tfoot>
+            <tr>
+              <th>User</th>
+              <th>Listing File</th>
+              <th>Hated</th>
+              <th>Ok</th>
+              <th>Loved</th>
+              <th>Total</th>
+              <th>View</th>
+              <th>Download</th>
+            </tr>
+        </tfoot>
+      </table>
     </div>
-    {% endfor %}
   </div>
 </section>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/dataTables.bulma.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    $('#ratings').DataTable();
+  });
+</script>
+
 {% endblock %}
