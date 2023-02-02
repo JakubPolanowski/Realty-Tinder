@@ -119,6 +119,17 @@ def listings(listings_file: str, index: int):
                     'listings', listings_file=form['filename'], index=int(form['index'])+1)
             )
 
+        if 'clear' in form and form.get('clear') == 'clear-feedback':
+            if 'feedback' not in session:
+                session['feedback'] = {}
+
+            session['feedback'][form['filename']] = {}
+
+            return redirect(
+                url_for(
+                    'listings', listings_file=form['filename'], index=int(form['index']))
+            )
+
         else:
             return render_template('error.html', error=400, subtitle="Invalid form POST"), 400
 

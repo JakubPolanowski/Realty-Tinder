@@ -248,6 +248,11 @@
 
         <div class="control">
           <form method="POST">
+                <div class="is-hidden">
+                  <input type="text" class="is-hidden" name="filename" value={{ listings_file }}>
+                  <input type="text" class="is-hidden" name="index" value={{ index }}>
+                </div>
+                
                 <button
                   type="submit"
                   name="clear"
