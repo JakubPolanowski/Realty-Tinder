@@ -76,8 +76,36 @@ def explore():
 @app.route('/ratings')
 def ratings():
 
-    # TODO
-    return render_template('error.html', error=501, subtitle="not implemented"), 501
+    ratings = {}
+
+    ratings_path = Path('data', 'ratings')
+
+    # yes this would scale TERRIBLY, but this is supposed to be a nano scale web app - not like the security or user management is sufficient for large scale either
+    if ratings_path.is_dir():
+        for usr_ratings in ratings_path.iterdir():
+
+            if usr_ratings.name == session.get('user') or session.get('user') == SUPERUSER:
+
+                ratings[usr_ratings.name] = {}
+                for rating_file in usr_ratings.iterdir():
+                    with open(rating_file, 'r') as f:
+                        ratings[usr_ratings.name][rating_file.stem] = json.load(
+                            f)
+
+    stats = {}
+    for usr, usr_ratings in ratings.items():
+        stats[usr] = {}
+        for file, file_ratings in usr_ratings.items():
+            stats[usr][file] = {'Hate': 0, 'Ok': 0,
+                                'Love': 0, 'Total': len(file_ratings)}
+
+            for _, rating in file_ratings.items():
+                # better error handling if unexpected value could be used
+                # but at that point should switch to using a database
+                # but that is overkill for current scope
+                stats[usr][file][rating] += 1
+
+    return render_template('ratings.html', ratings=ratings, stats=stats)
 
 
 @app.route('/admin')
@@ -94,7 +122,7 @@ def admin():
 @app.route('/listings/<string:listings_file>/<int:index>', methods=["GET", "POST"])
 def listings(listings_file: str, index: int):
 
-    if request.method == "POST":  # TODO handle clear POST and save POST
+    if request.method == "POST":
         form = request.form
 
         print(form.keys())
