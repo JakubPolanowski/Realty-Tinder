@@ -18,10 +18,18 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+# very low security approach, but that is the desired use of this
+superuser_file = Path('data/superuser')
+if superuser_file.exists():
+    with open(superuser_file, 'r') as f:
+        SUPERUSER = f.read()
+else:
+    SUPERUSER = None
+
 
 @app.context_processor
 def inject_user():
-    return dict(user=session.get('user'))
+    return dict(user=session.get('user'), superuser=(session.get('user') == SUPERUSER))
 
 
 @app.route('/')
