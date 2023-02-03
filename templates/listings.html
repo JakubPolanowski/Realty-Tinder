@@ -9,6 +9,9 @@
           <p class="card-header-title">{{ listings_file|replace("_", " ") }}</p>
           <div class="field is-grouped">
             <div class="control">
+              <a class="button is-link has-text-weight-bold is-size-5" href="{{ url_for('download_ratings', listing=listings_file) }}">DOWNLOAD</a>
+            </div>
+            <div class="control">
               <button class="button has-text-weight-bold is-size-5 is-danger js-gallery-modal-trigger" data-target="modal-clear">CLEAR</button>
             </div>
             <div class="control"> 
