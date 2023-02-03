@@ -73,6 +73,20 @@ def explore():
     return render_template('explore.html', files=files)
 
 
+@app.route('/spotlight')
+def spotlight():
+
+    if not (spotlight_path := Path('data', 'spotlight')).exists():
+        return render_template('spotlight.html')
+
+    with open(spotlight_path, 'r') as f:
+        spotlight_name = f.read()
+
+    # TODO FINISH
+
+    return render_template('spotlight.html')
+
+
 @app.route('/ratings')
 def ratings():
 
