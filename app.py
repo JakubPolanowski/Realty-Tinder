@@ -218,9 +218,13 @@ def admin():
     if session.get('user') != SUPERUSER:
         return render_template('error.html', error=404), 404
 
+    files = glob("data/listings/*.xlsx")
+    files = [(p.stem.replace('_', ' '), p.stem)
+             for p in [Path(f) for f in files]]
+
     # TODO upload listing files
     # TODO set splotlight on a file
-    return render_template('error.html', error=501, subtitle="not implemented"), 501
+    return render_template('admin.html', files=files)
 
 
 @ app.route('/listings/<string:listings_file>', defaults={'index': 0}, methods=["GET", "POST"])
