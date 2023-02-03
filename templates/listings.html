@@ -9,7 +9,15 @@
           <p class="card-header-title">{{ listings_file|replace("_", " ") }}</p>
           <div class="field is-grouped">
             <div class="control">
-              <a class="button is-link has-text-weight-bold is-size-5" href="{{ url_for('download_ratings', listing=listings_file) }}">DOWNLOAD</a>
+              <a
+                href="{{ listing['url'] }}"
+                target="_blank"
+                class="button is-link is-size-5 has-text-weight-bold"
+                >🔍 See on Realtor.com</a
+              >
+            </div>
+            <div class="control">
+              <a class="button is-primary has-text-weight-bold is-size-5" href="{{ url_for('download_ratings', listing=listings_file) }}">DOWNLOAD</a>
             </div>
             <div class="control">
               <button class="button has-text-weight-bold is-size-5 is-danger js-gallery-modal-trigger" data-target="modal-clear">CLEAR</button>
@@ -62,6 +70,97 @@
               </figure>
             </div>
             <div class="block">
+              <form method="POST" id="form-listing-feedback">
+                <input type="text" class="is-hidden" name="filename" value={{ listings_file }}>
+                <input type="text" class="is-hidden" name="index" value={{ index }}>
+                <input type="text" class="is-hidden" name="total" value={{ total }}>
+              </form>
+              <div class="columns">
+                <div class="column">
+                  <button
+                    form="form-listing-feedback"
+                    type="submit"
+                    name="feedback"
+                    value="Hate"
+                    class="button is-fullwidth is-size-5 has-text-weight-bold {% if listing['feedback'] is not none and listing['feedback'] != 'Hate' %}has-background-danger-light has-text-danger{% else %}has-text-white has-background-danger{% endif %}"
+                    >😡 Hate</button
+                  >
+                </div>
+                <div class="column">
+                  <button
+                    form="form-listing-feedback"
+                    type="submit"
+                    name="feedback"
+                    value="Ok"
+                    class="button is-fullwidth is-size-5 has-text-weight-bold {% if listing['feedback'] is not none and listing['feedback'] != 'Ok' %}has-background-info-light has-text-info{% else %}has-text-white has-background-info{% endif %}"
+                    >😐 Ok</button
+                  >
+                </div>
+                <div class="column">
+                  <button
+                    form="form-listing-feedback"
+                    type="submit"
+                    name="feedback"
+                    value="Love"
+                    class="button is-fullwidth is-size-5 has-text-weight-bold {% if listing['feedback'] is not none and listing['feedback'] != 'Love' %}has-background-success-light has-text-success{% else %}has-text-white has-background-success{% endif %}"
+                    >😍 Love</button
+                  >
+                </div>
+              </div>
+              
+            </div>
+            
+            <div class="block">
+              <div class="columns">
+                <div class="column"><b>Price:</b></div>
+                <div class="column">${{ listing['pretty price'] }}</div>
+                <div class="column"><b>Beds:</b></div>
+                <div class="column">{{ listing['beds'] }}</div>
+              </div>
+              <div class="columns">
+                <div
+                  class="column {% if 'new listing' in listing['flags'] %}notification is-info{% endif %}"
+                >
+                  <b>List Date:</b>
+                </div>
+                <div class="column">{{ listing['list date'] }}</div>
+                <div class="column"><b>Baths:</b></div>
+                <div class="column">{{ listing['baths'] }}</div>
+              </div>
+              <div class="columns">
+                <div class="column is-one-quarter"><b>Year Built:</b></div>
+                <div class="column is-one-quarter">
+                  {{ listing['pretty built'] }}
+                </div>
+                {% if listing['hoa fee'] %}
+                <div class="column notification is-warning"><b>HOA:</b></div>
+                <div class="column">${{ listing['pretty hoa'] }}/month</div>
+                {% endif %}
+              </div>
+              <hr class="mt-0"/>
+              <div class="columns">
+                <div
+                  class="column {% if listing['interior sqft'] > 2000 %}notification is-success{% endif %}{% if listing['interior sqft'] < 1000 %}notification is-danger{% endif %}"
+                >
+                  <b>Interior sqft:</b>
+                </div>
+                <div class="column">{{ listing['pretty sqft'] }}</div>
+                <div class="column"><b>Price per sqft:</b></div>
+                <div class="column">${{ listing['price per sqft'] }}</div>
+                <div
+                  class="column {% if listing['acres'] > 1.0 %}notification is-success{% endif %}{% if listing['acres'] < 0.25 %}notification is-danger{% endif %}"
+                >
+                  <b>Acres:</b>
+                </div>
+                <div class="column">{{ listing['pretty acres'] }}</div>
+              </div>
+              <hr class="mt-0"/>
+              <div class="columns">
+                <div class="column is-one-third"><b>Flags:</b></div>
+                <div class="column">{{ listing['flags'] }}</div>
+              </div>
+            </div>
+            <div class="block">
               <div class="columns">
                 <div class="column">
                   <a
@@ -109,96 +208,7 @@
                 </div>
               </div>
             </div>
-            <div class="block">
-              <a
-                href="{{ listing['url'] }}"
-                target="_blank"
-                class="button is-link is-size-5 is-fullwidth has-text-weight-bold"
-                >🔍 See on Realtor.com</a
-              >
-            </div>
-            <div class="block">
-              <div class="columns">
-                <div class="column"><b>Price:</b></div>
-                <div class="column">${{ listing['pretty price'] }}</div>
-                <div class="column"><b>Beds:</b></div>
-                <div class="column">{{ listing['beds'] }}</div>
-              </div>
-              <div class="columns">
-                <div
-                  class="column {% if 'new listing' in listing['flags'] %}notification is-info{% endif %}"
-                >
-                  <b>List Date:</b>
-                </div>
-                <div class="column">{{ listing['list date'] }}</div>
-                <div class="column"><b>Baths:</b></div>
-                <div class="column">{{ listing['baths'] }}</div>
-              </div>
-              <div class="columns">
-                <div class="column is-one-quarter"><b>Year Built:</b></div>
-                <div class="column is-one-quarter">
-                  {{ listing['pretty built'] }}
-                </div>
-                {% if listing['hoa fee'] %}
-                <div class="column notification is-warning"><b>HOA:</b></div>
-                <div class="column">${{ listing['pretty hoa'] }}/month</div>
-                {% endif %}
-              </div>
-              <hr />
-              <div class="columns">
-                <div
-                  class="column {% if listing['interior sqft'] > 2000 %}notification is-success{% endif %}{% if listing['interior sqft'] < 1000 %}notification is-danger{% endif %}"
-                >
-                  <b>Interior sqft:</b>
-                </div>
-                <div class="column">{{ listing['pretty sqft'] }}</div>
-                <div class="column"><b>Price per sqft:</b></div>
-                <div class="column">${{ listing['price per sqft'] }}</div>
-                <div
-                  class="column {% if listing['acres'] > 1.0 %}notification is-success{% endif %}{% if listing['acres'] < 0.25 %}notification is-danger{% endif %}"
-                >
-                  <b>Acres:</b>
-                </div>
-                <div class="column">{{ listing['pretty acres'] }}</div>
-              </div>
-              <hr />
-              <div class="columns">
-                <div class="column is-one-third"><b>Flags:</b></div>
-                <div class="column">{{ listing['flags'] }}</div>
-              </div>
-            </div>
           </div>
-        </div>
-        <div class="card-footer">
-          <form method="POST" id="form-listing-feedback">
-            <input type="text" class="is-hidden" name="filename" value={{ listings_file }}>
-            <input type="text" class="is-hidden" name="index" value={{ index }}>
-            <input type="text" class="is-hidden" name="total" value={{ total }}>
-          </form>
-          <button
-            form="form-listing-feedback"
-            type="submit"
-            name="feedback"
-            value="Hate"
-            class="button card-footer-item is-size-3 has-text-weight-bold {% if listing['feedback'] is not none and listing['feedback'] != 'Hate' %}has-background-danger-light has-text-danger{% else %}has-text-white has-background-danger{% endif %}"
-            >😡 Hate</button
-          >
-          <button
-            form="form-listing-feedback"
-            type="submit"
-            name="feedback"
-            value="Ok"
-            class="button card-footer-item is-size-3 has-text-weight-bold {% if listing['feedback'] is not none and listing['feedback'] != 'Ok' %}has-background-info-light has-text-info{% else %}has-text-white has-background-info{% endif %}"
-            >😐 Ok</button
-          >
-          <button
-            form="form-listing-feedback"
-            type="submit"
-            name="feedback"
-            value="Love"
-            class="button card-footer-item is-size-3 has-text-weight-bold {% if listing['feedback'] is not none and listing['feedback'] != 'Love' %}has-background-success-light has-text-success{% else %}has-text-white has-background-success{% endif %}"
-            >😍 Love</button
-          >
         </div>
       </div>
     </div>
