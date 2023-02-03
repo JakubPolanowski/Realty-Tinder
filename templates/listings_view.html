@@ -7,6 +7,15 @@
       <div class="card">
         <div class="card-header">
           <p class="card-header-title">{{ listings_file|replace("_", " ") }}</p>
+          <div class="field is-grouped">
+            <div class="control">
+              {% if request.args.get('usr_feedback') is not none %}
+              <a class="button is-link has-text-weight-bold is-size-5" href="{{ url_for('download_ratings', usr=request.args.get('usr_feedback'), listing=listings_file) }}">Download</a>
+              {% else %}
+              <a class="button is-link has-text-weight-bold is-size-5" href="{{ url_for('download_ratings', listing=listings_file) }}">Download</a>
+              {% endif %}
+            </div>
+          </div>
         </div>
         <div class="card-content">
           <div class="block">
