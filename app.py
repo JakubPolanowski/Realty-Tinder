@@ -118,19 +118,21 @@ def download_ratings():
     if request.args.get('listing') is None or not (listing_path := Path('data', 'listings', f'{request.args.get("listing")}.xlsx')).exists():
         return render_template('error.html', error=400, subtitle="Invalid listing file name"), 400
 
-    if request.args.get('usr') is None or not (ratings_path := Path('data', 'ratings', request.args.get('usr'), f'{request.args.get("listing")}.json')).exists():
-        return render_template('error.html', error=400, subtitle="Invalid user"), 400
-
     df = pd.read_excel(listing_path)
-
-    with open(ratings_path, 'r') as f:
-        ratings = json.load(f)
-
-    ratings.pop('total')
-    ratings = {int(k): v for k, v in ratings.items()}
-
-    df['Rating'] = df.index.map(ratings)
     df.drop(columns=['photos'], inplace=True)
+
+    if request.args.get('usr') is not None:
+        if not (ratings_path := Path('data', 'ratings', request.args.get('usr'), f'{request.args.get("listing")}.json')).exists():
+            return render_template('error.html', error=400, subtitle="Invalid user"), 400
+        else:
+
+            with open(ratings_path, 'r') as f:
+                ratings = json.load(f)
+
+            ratings.pop('total')
+            ratings = {int(k): v for k, v in ratings.items()}
+
+            df['Rating'] = df.index.map(ratings)
 
     temp_save_path = Path('temp', 'ratings_download.xlsx')
     temp_save_path.parent.mkdir(parents=True, exist_ok=True)
