@@ -218,7 +218,8 @@ def admin():
     if session.get('user') != SUPERUSER:
         return render_template('error.html', error=404), 404
 
-    # TODO
+    # TODO upload listing files
+    # TODO set splotlight on a file
     return render_template('error.html', error=501, subtitle="not implemented"), 501
 
 
