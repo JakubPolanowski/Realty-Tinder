@@ -27,7 +27,7 @@
                 </p>
               </div>
             </div>            
-            <p class="subtitle">{{ index +1 }} of {{ total }} {% if rated is defined %}&nbsp;&nbsp;&nbsp; <a class="js-gallery-modal-trigger" data-target="modal-no-feedback">{{ rated|length }} With Feedback</a>{% endif %}</p>
+            <p class="subtitle">{{ index +1 }} of {{ total }} {% if rated is defined %}&nbsp;&nbsp;&nbsp; <a class="js-gallery-modal-trigger" data-target="modal-has-feedback">{{ rated|length }} With Feedback</a>{% endif %}</p>
           </div>
           <div class="content">
             <div class="block">
@@ -163,11 +163,11 @@
   <button class="modal-close is-large" aria-label="close"></button>
 </div>
 
-<div id="modal-no-feedback" class="modal client-modal">
+<div id="modal-has-feedback" class="modal client-modal">
   <div class="modal-background"></div>
   <div class="modal-card">
     <header class="modal-card-head">
-      <p class="modal-card-title">Pages Without Feedback</p>
+      <p class="modal-card-title">Pages With Feedback</p>
       <button class="delete" aria-label="close"></button>
     </header>
     <section class="modal-card-body">
@@ -176,8 +176,8 @@
           <div class="control is-fullwidth is-size-4">
             <div class="select">
               <select name="page">
-                {% for nr in not_rated %}
-                  <option>{{ nr+1 }}</option>
+                {% for r in rated %}
+                  <option>{{ r|int +1 }}</option>
                 {% endfor %}
               </select>
             </div>
