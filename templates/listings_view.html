@@ -11,6 +11,13 @@
         <div class="card-content">
           <div class="block">
             <div class="title columns">
+              {% if rating is defined and rating is not none %}
+              <div class="column is-narrow">
+                <span class="tag has-text-weight-bold is-size-6 {% if rating == 'Hate' %}is-danger{% endif %}{% if rating == 'Ok' %}is-info{% endif %}{% if rating == 'Love' %}is-success{% endif %}">
+                  {{ rating }}
+                </span>
+              </div>
+              {% endif %}
               <div class="column is-narrow">
                 <p>{{ listing['address'] }}</p>
               </div>
@@ -19,10 +26,8 @@
                   {{ listing['pretty minutes'] }} Minutes to Work
                 </p>
               </div>
-            </div>
-            {# TODO CHANGE TO WITH FEEDBACK #}
-            {# TODO ADD DISPLAY OF FEEDBACK VALUE #}
-            <p class="subtitle">{{ index +1 }} of {{ total }} &nbsp;&nbsp;&nbsp; <a class="js-gallery-modal-trigger" data-target="modal-no-feedback">{{ not_rated|length }} Without Feedback</a></p>
+            </div>            
+            <p class="subtitle">{{ index +1 }} of {{ total }} {% if rated is defined %}&nbsp;&nbsp;&nbsp; <a class="js-gallery-modal-trigger" data-target="modal-no-feedback">{{ rated|length }} With Feedback</a>{% endif %}</p>
           </div>
           <div class="content">
             <div class="block">
@@ -157,6 +162,40 @@
   <div class="modal-content" style="width: 80%"></div>
   <button class="modal-close is-large" aria-label="close"></button>
 </div>
+
+<div id="modal-no-feedback" class="modal client-modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Pages Without Feedback</p>
+      <button class="delete" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body">
+      <form method="POST">
+        <div class="field has-addons">
+          <div class="control is-fullwidth is-size-4">
+            <div class="select">
+              <select name="page">
+                {% for nr in not_rated %}
+                  <option>{{ nr+1 }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="control">
+            <button
+              type="submit"
+              class="button is-size-4 is-primary is-light is-outlined"
+            >
+              Go ⭐
+            </button>
+          </div>
+        </div>
+      </form>
+    </section>
+  </div>
+</div>
+
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {

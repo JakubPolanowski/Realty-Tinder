@@ -179,17 +179,22 @@ def listing_view(listings_file: str, index: int):
         # special values
         listing = helpers.listing.prepare_special_values(listing)
 
-        # added feedback to listing if exists
-        listing['feedback'] = session.get('feedback', {})\
-            .get(listings_file, {})\
-            .get(index)
+        # check if user feedback specified
+        if (feedback_of_user := request.args.get('usr_feedback')) is not None:
+            if (user_feedback_path := Path('data', 'ratings', feedback_of_user, f'{listings_file}.json')).exists():
+                with open(user_feedback_path, 'r') as f:
+                    user_feedback = json.load(f)
 
-        # not yet rated
-        not_rated = set(range(len(dataset))) - \
-            set(session.get('feedback', {}).get(listings_file, {}).keys())
+                user_feedback.pop('total')
+
+                rated = set(user_feedback.keys())
+                rating = user_feedback.get(str(index))
+
+                # render
+                return render_template('listings_view.html', listings_file=listings_file, index=index, total=len(dataset), rated=rated, rating=rating, listing=listing, images=listing['photos'])
 
         # render
-        return render_template('listings_view.html', listings_file=listings_file, index=index, total=len(dataset), not_rated=not_rated, listing=listing, images=listing['photos'])
+        return render_template('listings_view.html', listings_file=listings_file, index=index, total=len(dataset), listing=listing, images=listing['photos'])
 
 
 @ app.route('/admin')
