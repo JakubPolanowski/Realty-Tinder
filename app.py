@@ -85,15 +85,13 @@ def ratings():
     if ratings_path.is_dir():
         for usr_ratings in ratings_path.iterdir():
 
-            if usr_ratings.name == session.get('user') or session.get('user') == SUPERUSER:
-
-                ratings[usr_ratings.name] = {}
-                for rating_file in usr_ratings.iterdir():
-                    with open(rating_file, 'r') as f:
-                        ratings[usr_ratings.name][rating_file.stem] = json.load(
-                            f)
-                        total = ratings[usr_ratings.name][rating_file.stem].pop(
-                            'total')
+            ratings[usr_ratings.name] = {}
+            for rating_file in usr_ratings.iterdir():
+                with open(rating_file, 'r') as f:
+                    ratings[usr_ratings.name][rating_file.stem] = json.load(
+                        f)
+                    total = ratings[usr_ratings.name][rating_file.stem].pop(
+                        'total')
 
     stats = {}
     for usr, usr_ratings in ratings.items():
