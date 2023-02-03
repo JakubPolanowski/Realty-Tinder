@@ -6,7 +6,7 @@
     />
 
 
-<section class="section"> {# TODO #}
+<section class="section">
   <div class="container">
     <div class="block">
       <table id="ratings" class="table is-striped" style="width:100%">
@@ -36,7 +36,7 @@
             <td>{{ listing_ratings['Love'] }}</td>
             <td>{{ listing_ratings['Total'] }}</td>
             <td>{{ listing_ratings['Listings'] }}</td>
-            <td><a href="{{ url_for('view_ratings', usr=usr, listing=listing) }}">View</a></td>
+            <td><a href="{{ url_for('listing_view', usr_feedback=usr, listings_file=listing) }}">View</a></td>
             <td><a href="{{ url_for('download_ratings', usr=usr, listing=listing) }}">Download</a></td>
             </tr>
             
