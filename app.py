@@ -150,7 +150,7 @@ def listing_view(listings_file: str, index: int):
         if 'page' in form:
             return redirect(
                 url_for('listing_view', listings_file=listings_file,
-                        index=int(form['page'])-1)
+                        index=int(form['page'])-1, **request.args)
             )
 
         else:
