@@ -140,10 +140,56 @@ def download_ratings():
     return send_file(temp_save_path)
 
 
-@ app.route('/ratings/view')
-def view_ratings():
-    #    TODO
-    return render_template('error.html', error=501, subtitle="not implemented"), 501
+@ app.route('/view/<string:listings_file>', defaults={'index': 0}, methods=["GET", "POST"])
+@ app.route('/view/<string:listings_file>/<int:index>', methods=["GET", "POST"])
+def listing_view(listings_file: str, index: int):
+
+    if request.method == "POST":
+        form = request.form
+
+        if 'page' in form:
+            return redirect(
+                url_for('listing_view', listings_file=listings_file,
+                        index=int(form['page'])-1)
+            )
+
+        else:
+            return render_template('error.html', error=400, subtitle="Invalid form POST"), 400
+
+    else:
+
+        if not (listing_path := Path(f"data/listings/{listings_file}.xlsx")).exists():
+            return render_template('error.html', error=404, subtitle='The listings file does not exist'), 404
+
+        if session.get('listings_file') != listings_file:
+            df = pd.read_excel(listing_path)
+            df['list date'] = df['list date'].dt.strftime('%m/%d/%Y')
+
+            df['photos'] = df['photos'].apply(json.loads)
+
+            session['listings_file'] = listings_file
+            session['listings'] = df.to_json(orient='records')
+
+        dataset = json.loads(session['listings'])
+        if index >= len(dataset):
+            return render_template('error.html', error=404, subtitle=f'Out of bounds! There are only {len(dataset)} listing(s), {index+1} is invalid.'), 404
+
+        listing = dataset[index]
+
+        # special values
+        listing = helpers.listing.prepare_special_values(listing)
+
+        # added feedback to listing if exists
+        listing['feedback'] = session.get('feedback', {})\
+            .get(listings_file, {})\
+            .get(index)
+
+        # not yet rated
+        not_rated = set(range(len(dataset))) - \
+            set(session['feedback'][listings_file].keys())
+
+        # render
+        return render_template('listings_view.html', listings_file=listings_file, index=index, total=len(dataset), not_rated=not_rated, listing=listing, images=listing['photos'])
 
 
 @ app.route('/admin')
@@ -162,8 +208,6 @@ def listings(listings_file: str, index: int):
 
     if request.method == "POST":
         form = request.form
-
-        print(form.keys())
 
         if 'page' in form:
             return redirect(

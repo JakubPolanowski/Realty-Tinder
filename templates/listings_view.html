@@ -1,0 +1,361 @@
+{% extends 'base.html' %} {% block content %}
+
+<section class="section is-paddingless">
+  <div class="container">
+    <div class="block"></div>
+    <div class="block">
+      <div class="card">
+        <div class="card-header">
+          <p class="card-header-title">{{ listings_file|replace("_", " ") }}</p>
+        </div>
+        <div class="card-content">
+          <div class="block">
+            <div class="title columns">
+              <div class="column is-narrow">
+                <p>{{ listing['address'] }}</p>
+              </div>
+              <div class="column">
+                <p class="{{ listing['minutes class'] }}">
+                  {{ listing['pretty minutes'] }} Minutes to Work
+                </p>
+              </div>
+            </div>
+            {# TODO CHANGE TO WITH FEEDBACK #}
+            {# TODO ADD DISPLAY OF FEEDBACK VALUE #}
+            <p class="subtitle">{{ index +1 }} of {{ total }} &nbsp;&nbsp;&nbsp; <a class="js-gallery-modal-trigger" data-target="modal-no-feedback">{{ not_rated|length }} Without Feedback</a></p>
+          </div>
+          <div class="content">
+            <div class="block">
+              <figure class="image" style="height: 500px;">
+                <a class="js-gallery-modal-trigger" data-target="modal-gallery">
+                  <img
+                    class="js-gallery-model-trigger"
+                    data-target="modal-gallery"
+                    style="max-height: 500px; width: auto; height: auto"
+                    src="{{ images[0] }}"
+                    alt="Placeholder image"
+                  />
+                </a>
+              </figure>
+            </div>
+            <div class="block">
+              <div class="columns">
+                <div class="column">
+                  <a
+                    class="button has-text-weight-bold is-light is-size-5 is-fullwidth"
+                    {% if index < 1 %}
+                      disabled
+                    {% else %}
+                      href="{{ url_for('listing_view', listings_file=listings_file, index=index-1) }}"
+                    {% endif %}
+                    >👈 Previous</a
+                  >
+                </div>
+                <div class="column">
+                  <form method="POST">
+                    <div class="field has-addons">
+                      <div class="control is-fullwidth">
+                        <input
+                          class="input is-size-5"
+                          type="number"
+                          name="page"
+                          placeholder="Page"
+                        />
+                      </div>
+                      <div class="control">
+                        <button
+                          type="submit"
+                          class="button is-outlined has-background-light is-size-5"
+                        >
+                          Go ⭐
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div class="column">
+                  <a
+                    class="button has-text-weight-bold is-light is-size-5 is-fullwidth"
+                    {% if index+1 >= total %}
+                      disabled
+                    {% else %}
+                      href="{{ url_for('listing_view', listings_file=listings_file, index=index+1) }}"
+                    {% endif %}
+                    >Next 👉</a
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="block">
+              <a
+                href="{{ listing['url'] }}"
+                target="_blank"
+                class="button is-link is-size-5 is-fullwidth has-text-weight-bold"
+                >🔍 See on Realtor.com</a
+              >
+            </div>
+            <div class="block">
+              <div class="columns">
+                <div class="column"><b>Price:</b></div>
+                <div class="column">${{ listing['pretty price'] }}</div>
+                <div class="column"><b>Beds:</b></div>
+                <div class="column">{{ listing['beds'] }}</div>
+              </div>
+              <div class="columns">
+                <div
+                  class="column {% if 'new listing' in listing['flags'] %}notification is-info{% endif %}"
+                >
+                  <b>List Date:</b>
+                </div>
+                <div class="column">{{ listing['list date'] }}</div>
+                <div class="column"><b>Baths:</b></div>
+                <div class="column">{{ listing['baths'] }}</div>
+              </div>
+              <div class="columns">
+                <div class="column is-one-quarter"><b>Year Built:</b></div>
+                <div class="column is-one-quarter">
+                  {{ listing['pretty built'] }}
+                </div>
+                {% if listing['hoa fee'] %}
+                <div class="column notification is-warning"><b>HOA:</b></div>
+                <div class="column">${{ listing['pretty hoa'] }}/month</div>
+                {% endif %}
+              </div>
+              <hr class="mt-0" />
+              <div class="columns">
+                <div
+                  class="column {% if listing['interior sqft'] > 2000 %}notification is-success{% endif %}{% if listing['interior sqft'] < 1000 %}notification is-danger{% endif %}"
+                >
+                  <b>Interior sqft:</b>
+                </div>
+                <div class="column">{{ listing['pretty sqft'] }}</div>
+                <div class="column"><b>Price per sqft:</b></div>
+                <div class="column">${{ listing['price per sqft'] }}</div>
+                <div
+                  class="column {% if listing['acres'] > 1.0 %}notification is-success{% endif %}{% if listing['acres'] < 0.25 %}notification is-danger{% endif %}"
+                >
+                  <b>Acres:</b>
+                </div>
+                <div class="column">{{ listing['pretty acres'] }}</div>
+              </div>
+              <hr class="mt-0"/>
+              <div class="columns">
+                <div class="column is-one-third"><b>Flags:</b></div>
+                <div class="column">{{ listing['flags'] }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="block"></div>
+  </div>
+</section>
+
+<div id="modal-gallery" class="modal client-modal">
+  <div class="modal-background"></div>
+  <div class="modal-content" style="width: 80%"></div>
+  <button class="modal-close is-large" aria-label="close"></button>
+</div>
+
+{% if request.args.get('just_saved') %}
+<div id="modal-saved" class="modal client-modal is-active">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Saved!</p>
+      <button class="delete" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body is-size-5">
+     <p>Feedbacks for this listing have been saved. You can see them under 'Ratings'</p>
+    </section>
+    <footer class="modal-card-foot">
+      <div class="field is-grouped">
+
+        <div class="control">
+         <button class="button has-text-weight-bold is-primary is-size-5">Ok</button>
+        </div>
+        <div class="control">
+          <a href="{{ url_for('ratings') }}" class="button has-text-weight-bold is-link is-size-5">Open Ratings</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+{% endif %}
+
+<div id="modal-clear" class="modal client-modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Are You Sure?</p>
+      <button class="delete" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body is-size-5">
+      <p>Are you sure you wanted clear your cached feedback for this listing set? <b>This CANNOT be undone.</b></p>
+    </section>
+    <footer class="modal-card-foot">
+      <div class="field is-grouped">
+
+        <div class="control">
+          <form method="POST">
+                <div class="is-hidden">
+                  <input type="text" class="is-hidden" name="filename" value={{ listings_file }}>
+                  <input type="text" class="is-hidden" name="index" value={{ index }}>
+                </div>
+                
+                <button
+                  type="submit"
+                  name="clear"
+                  value="clear-feedback"
+                  class="button has-text-weight-bold is-danger is-size-5"
+                >
+                  CLEAR
+                </button>
+          </form>
+        </div>
+        <div class="control">
+          <button class="button has-text-weight-bold is-primary is-size-5">Cancel</button>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+
+<div id="modal-no-feedback" class="modal client-modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Pages Without Feedback</p>
+      <button class="delete" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body">
+      <form method="POST">
+        <div class="field has-addons">
+          <div class="control is-fullwidth is-size-4">
+            <div class="select">
+              <select name="page">
+                {% for nr in not_rated %}
+                  <option>{{ nr+1 }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="control">
+            <button
+              type="submit"
+              class="button is-size-4 is-primary is-light is-outlined"
+            >
+              Go ⭐
+            </button>
+          </div>
+        </div>
+      </form>
+    </section>
+  </div>
+</div>
+
+{% if user is none %}
+<div class="modal server-modal is-active">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Login Required</p>
+    </header>
+    <section class="modal-card-body">
+      <form action="{{ url_for('login') }}" method="POST">
+        <div class="field has-addons">
+          <div class="is-hidden">
+            <input type="text" class="input" name="current_page" value="{{ request.path }}">
+          </div>
+          <div class="control">
+            <input class="input" type="text" name="user" placeholder="Username" required>
+          </div>
+          <div class="control">
+            <button class="button is-primary has-text-weight-bold" type="submit">
+                Login
+            </button>
+          </div>
+        </div>
+      </form>
+    </section>
+  </div>
+</div>
+{% endif %}
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Functions to open and close a modal
+    function openModal($el) {
+      $el.classList.add("is-active");
+
+      if ($el.id === "modal-gallery" && ! $el.classList.contains('modal-gallery-loaded')) {
+
+        $el.classList.add("modal-gallery-loaded");
+
+        $content = $el.getElementsByClassName("modal-content")[0];
+
+        {% for image in images %}
+
+        $content.innerHTML += `
+        <div class="block">
+          <p class="image">
+            <img src="{{ image }}" alt="" />
+          </p>
+        </div>
+        `
+
+        {% endfor %}
+      }
+    }
+
+    function closeModal($el) {
+      $el.classList.remove("is-active");
+    }
+
+    function closeAllModals() {
+      (document.querySelectorAll(".client-modal") || []).forEach(($modal) => {
+          closeModal($modal);
+      });
+    }
+
+    // Add a click event on buttons to open a specific modal
+    (document.querySelectorAll(".js-gallery-modal-trigger") || []).forEach(
+      ($trigger) => {
+        const modal = $trigger.dataset.target;
+        const $target = document.getElementById(modal);
+
+        $trigger.addEventListener("click", () => {
+          openModal($target);
+        });
+      }
+    );
+
+    // Add a click event on various child elements to close the parent modal
+    (
+      document.querySelectorAll(
+        ".modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button"
+      ) || []
+    ).forEach(($close) => {
+      const $target = $close.closest(".modal");
+      
+      if ($target.classList.contains('client-modal')) {
+        $close.addEventListener("click", () => {
+          closeModal($target);
+        });
+      }
+    });
+
+    // Add a keyboard event to close all modals
+    document.addEventListener("keydown", (event) => {
+      const e = event || window.event;
+
+      if (e.keyCode === 27) {
+        // Escape key
+        closeAllModals();
+      }
+    });
+  });
+</script>
+
+{% endblock %}
