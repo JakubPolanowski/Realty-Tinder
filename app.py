@@ -187,7 +187,8 @@ def listing_view(listings_file: str, index: int):
 
                 user_feedback.pop('total')
 
-                rated = set(user_feedback.keys())
+                rated = [int(k) for k in user_feedback.keys()]
+                rated.sort()
                 rating = user_feedback.get(str(index))
 
                 # render
