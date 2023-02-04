@@ -275,7 +275,7 @@ def first_time_config():
 
         session['user'] = request.form['user']
 
-        redirect(url_for('index'))
+        return redirect(url_for('index'))
     else:
         return render_template('first_time_setup.html')
 
