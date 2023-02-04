@@ -154,8 +154,8 @@ def download_ratings():
     return send_file(temp_save_path)
 
 
-@ app.route('/view/<string:listings_file>', defaults={'index': 0}, methods=["GET", "POST"])
-@ app.route('/view/<string:listings_file>/<int:index>', methods=["GET", "POST"])
+@app.route('/view/<string:listings_file>', defaults={'index': 0}, methods=["GET", "POST"])
+@app.route('/view/<string:listings_file>/<int:index>', methods=["GET", "POST"])
 def listing_view(listings_file: str, index: int):
 
     if request.method == "POST":
@@ -212,7 +212,7 @@ def listing_view(listings_file: str, index: int):
         return render_template('listings_view.html', listings_file=listings_file, index=index, total=len(dataset), listing=listing, images=listing['photos'])
 
 
-@ app.route('/admin')
+@app.route('/admin')
 def admin():
 
     if session.get('user') != SUPERUSER:
@@ -227,8 +227,19 @@ def admin():
     return render_template('admin.html', files=files)
 
 
-@ app.route('/listings/<string:listings_file>', defaults={'index': 0}, methods=["GET", "POST"])
-@ app.route('/listings/<string:listings_file>/<int:index>', methods=["GET", "POST"])
+@app.route('/first-time', methods=['GET', 'POST'])
+def first_time_config():
+
+    # TODO add check if admin is already setup
+
+    if request.method == "POST":
+        return render_template('error.html', subtitle='Not implemented', error=501), 501
+    else:
+        return render_template('first_time_setup.html')
+
+
+@app.route('/listings/<string:listings_file>', defaults={'index': 0}, methods=["GET", "POST"])
+@app.route('/listings/<string:listings_file>/<int:index>', methods=["GET", "POST"])
 def listings(listings_file: str, index: int):
 
     if request.method == "POST":
