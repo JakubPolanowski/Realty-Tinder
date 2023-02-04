@@ -268,7 +268,7 @@ def first_time_config():
                 {'user': user, 'password': pwd}, f
             )
 
-        # TODO set user and set is superuser
+        session['user'] = request.form['user']
 
         redirect(url_for('index'))
     else:
