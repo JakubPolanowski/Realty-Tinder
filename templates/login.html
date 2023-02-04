@@ -1,0 +1,47 @@
+{% extends 'base.html' %} {% block content %}
+
+<section class="section">
+  <div class="container">
+    
+    <div class="block">
+      <h1 class="title">Login</h1>
+    </div>
+
+    <div class="block">
+      
+      <form method="POST">
+        <div class="field">
+          <label class="label">Username</label>
+          <div class="control has-icons-left has-icons-right">
+            <input class="input" type="text" placeholder="Username" name="user">
+            <span class="icon is-small is-left">
+              <i class="fas fa-user"></i>
+            </span>
+            <span class="icon is-small is-right">
+              <i class="fas fa-check"></i>
+            </span>
+          </div>
+        </div>
+        {% if request.args.get('ask-pass') %}
+        <div class="field">
+          <p class="control has-icons-left">
+            <input class="input" type="password" placeholder="Password" name="pwd">
+            <span class="icon is-small is-left">
+              <i class="fas fa-lock"></i>
+            </span>
+          </p>
+        </div>
+        {% endif %}
+        <div class="field">
+          <p class="control">
+            <button type="submit" class="button is-success">
+              Login
+            </button>
+          </p>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</section>
+{% endblock %}
