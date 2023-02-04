@@ -249,7 +249,7 @@ def admin():
         if (file := request.form.get('file')) is not None:
 
             if 'spotlight' in request.form:
-                splotlight_path = Path('data', 'splotlight')
+                splotlight_path = Path('data', 'spotlight')
                 splotlight_path.parent.mkdir(parents=True, exist_ok=True)
 
                 with open(splotlight_path, 'w') as f:
