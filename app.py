@@ -54,14 +54,37 @@ def login():
 
         if 'user' not in form:
             return render_template('error.html', error=400, subtitle="Bad request, user is required")
+
         if not re.match(r'^(?=.{3,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$', str(form['user'])):
             return render_template('error.html', error=400, subtitle="Invalid username. Should be 3-20 characters long, alpha numeric")
+
         else:
-            session['user'] = form['user']
-            return redirect(form['current_page'])
+            if (super_path := Path('data', 'superuser.json')).exists():
+                with open(super_path, 'r') as f:
+                    super_config = json.load(f)
+
+                if super_config.get('user') == form['user']:
+                    if 'pwd' in form:
+                        if super_config.get("password") == form['pwd']:
+                            session['user'] = form['user']
+                            if 'current_page' in form:
+                                return redirect(form['current_page'])
+                            else:
+                                return redirect('/')
+                        else:
+                            return render_template('error.html', error=400), 400
+
+                    else:
+                        return redirect(url_for('login', ask_pass=True))
+                else:
+                    session['user'] = form['user']
+                    if 'current_page' in form:
+                        return redirect(form['current_page'])
+                    else:
+                        return redirect('/')
 
     else:
-        return render_template('error.html', error=501, subtitle="dedicated login page not implemented"), 501
+        return render_template('login.html')
 
 
 @app.route('/explore')
@@ -230,10 +253,24 @@ def admin():
 @app.route('/first-time', methods=['GET', 'POST'])
 def first_time_config():
 
-    # TODO add check if admin is already setup
+    # if super user is already setup, give error
+    if (super_path := Path('data', 'superuser.json')).exists():
+        return render_template('error.html', error=500), 500
 
     if request.method == "POST":
-        return render_template('error.html', subtitle='Not implemented', error=501), 501
+
+        if (user := request.form.get('user')) is None or (pwd := request.form.get('pwd')) is None:
+            return render_template('error.html', subtitle='Invalid user or password', error=400), 400
+
+        super_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(super_path, 'w') as f:
+            json.dump(
+                {'user': user, 'password': pwd}, f
+            )
+
+        # TODO set user and set is superuser
+
+        redirect(url_for('index'))
     else:
         return render_template('first_time_setup.html')
 
