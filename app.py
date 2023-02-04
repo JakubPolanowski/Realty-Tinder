@@ -18,11 +18,10 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# very low security approach, but that is the desired use of this
-superuser_file = Path('data/superuser')
-if superuser_file.exists():
-    with open(superuser_file, 'r') as f:
-        SUPERUSER = f.read()
+if (super_path := Path('data', 'superuser.json')).exists():
+    with open(super_path, 'r') as f:
+        super_json = json.load(f)
+    SUPERUSER = super_json.get('user')
 else:
     SUPERUSER = None
 
@@ -62,26 +61,28 @@ def login():
             if (super_path := Path('data', 'superuser.json')).exists():
                 with open(super_path, 'r') as f:
                     super_config = json.load(f)
+            else:
+                super_config = {'user': None, 'password': None}
 
-                if super_config.get('user') == form['user']:
-                    if 'pwd' in form:
-                        if super_config.get("password") == form['pwd']:
-                            session['user'] = form['user']
-                            if 'current_page' in form:
-                                return redirect(form['current_page'])
-                            else:
-                                return redirect('/')
+            if super_config.get('user') == form['user']:
+                if 'pwd' in form:
+                    if super_config.get("password") == form['pwd']:
+                        session['user'] = form['user']
+                        if 'current_page' in form:
+                            return redirect(form['current_page'])
                         else:
-                            return render_template('error.html', error=400), 400
+                            return redirect('/')
+                    else:
+                        return render_template('error.html', error=400), 400
 
-                    else:
-                        return redirect(url_for('login', ask_pass=True))
                 else:
-                    session['user'] = form['user']
-                    if 'current_page' in form:
-                        return redirect(form['current_page'])
-                    else:
-                        return redirect('/')
+                    return redirect(url_for('login', ask_pass=True))
+            else:
+                session['user'] = form['user']
+                if 'current_page' in form:
+                    return redirect(form['current_page'])
+                else:
+                    return redirect('/')
 
     else:
         return render_template('login.html')
