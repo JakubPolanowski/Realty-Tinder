@@ -240,19 +240,47 @@ def listing_view(listings_file: str, index: int):
         return render_template('listings_view.html', listings_file=listings_file, index=index, total=len(dataset), listing=listing, images=listing['photos'])
 
 
-@app.route('/admin')
+@app.route('/admin', methods=['GET', 'POST'])
 def admin():
 
-    if session.get('user') != SUPERUSER:
-        return render_template('error.html', error=404), 404
+    if request.method == "POST":
 
-    files = glob("data/listings/*.xlsx")
-    files = [(p.stem.replace('_', ' '), p.stem)
-             for p in [Path(f) for f in files]]
+        print(request.form)
+        if (file := request.form.get('file')) is not None:
 
-    # TODO upload listing files
-    # TODO set splotlight on a file
-    return render_template('admin.html', files=files)
+            if 'spotlight' in request.form:
+                splotlight_path = Path('data', 'splotlight')
+                splotlight_path.parent.mkdir(parents=True, exist_ok=True)
+
+                with open(splotlight_path, 'w') as f:
+                    f.write(file)
+
+                return redirect(url_for('admin'))
+
+            elif 'delete' in request.form:
+                delete_path = Path('data', 'listings', f'{file}.xlsx')
+                delete_path.unlink(missing_ok=True)
+                return redirect(url_for('admin'))
+
+            else:
+                return render_template(
+                    'error.html', subtitle="Invalid values", error=400), 400
+
+        else:
+            return render_template(
+                'error.html', subtitle="Invalid values", error=400), 400
+
+    else:
+
+        if session.get('user') != SUPERUSER:
+            return render_template('error.html', error=404), 404
+
+        files = glob("data/listings/*.xlsx")
+        files = [(p.stem.replace('_', ' '), p.stem)
+                 for p in [Path(f) for f in files]]
+
+        # TODO upload listing files
+        return render_template('admin.html', files=files)
 
 
 @app.route('/first-time', methods=['GET', 'POST'])
