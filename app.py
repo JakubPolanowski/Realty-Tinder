@@ -245,8 +245,30 @@ def admin():
 
     if request.method == "POST":
 
-        print(request.form)
-        if (file := request.form.get('file')) is not None:
+        if (uploaded_file := request.files.get('listing_upload')) is not None and uploaded_file.filename != '' and 'upload' in request.form:
+            print(uploaded_file.filename)
+            if uploaded_file.filename[-5:] == ".xlsx":
+
+                # should build in addition checks to chekc if file is correct
+
+                upload_save_path = Path(
+                    'data', 'listings', uploaded_file.filename)
+
+                if upload_save_path.exists():
+                    return render_template(
+                        'error.html', subtitle="File already exists", error=400), 400
+
+                upload_save_path.parent.mkdir(parents=True, exist_ok=True)
+
+                uploaded_file.save(upload_save_path)
+
+                return redirect(url_for('admin'))
+
+            else:
+                return render_template(
+                    'error.html', subtitle="Invalid file", error=400), 400
+
+        elif (file := request.form.get('file')) is not None:
 
             if 'spotlight' in request.form:
                 splotlight_path = Path('data', 'spotlight')
