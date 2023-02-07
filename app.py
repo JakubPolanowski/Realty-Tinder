@@ -426,6 +426,18 @@ def listings(listings_file: str, index: int):
         # special values
         listing = helpers.listing.prepare_special_values(listing)
 
+        # if load feedback arg passed, load feedback to session
+        if request.args.get('load_feedback'):
+            loaded_feedback = helpers.listing.load_saved_ratings(
+                session.get('user'), listings_file)
+
+            if not 'feedback' in session:
+                session['feedback'] = {}
+            if not listings_file in session['feedback']:
+                session['feedback'] = {}
+
+            session['feedback'][listings_file] = loaded_feedback
+
         # added feedback to listing if exists
         listing['feedback'] = session.get('feedback', {})\
             .get(listings_file, {})\

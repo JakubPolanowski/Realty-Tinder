@@ -1,5 +1,6 @@
 from typing import Dict, List, Any
 from bs4 import BeautifulSoup
+from pathlib import Path
 import requests
 import json
 import re
@@ -63,6 +64,19 @@ def prepare_special_values(listing: Dict[str, Any]):
         listing['interior sqft']) else listing['interior sqft']
 
     return listing
+
+
+def load_saved_ratings(usr, file):
+    if (user_feedback_path := Path('data', 'ratings', usr, f'{file}.json')).exists():
+        with open(user_feedback_path, 'r') as f:
+            user_feedback = json.load(f)
+            user_feedback.pop('total')
+            user_feedback = {int(k): v for k, v in user_feedback.items()}
+
+        return user_feedback
+
+    else:
+        return {}
 
 
 def get_images_from_realtor(listing_url: str) -> List[str]:

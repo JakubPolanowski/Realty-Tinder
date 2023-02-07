@@ -36,7 +36,13 @@
             <td>{{ listing_ratings['Love'] }}</td>
             <td>{{ listing_ratings['Total'] }}</td>
             <td>{{ listing_ratings['Listings'] }}</td>
-            <td><a href="{{ url_for('listing_view', usr_feedback=usr, listings_file=listing) }}">View</a></td>
+            <td>
+              {% if user == usr %}
+              <a href="{{ url_for('listings', listings_file=listing, load_feedback=True) }}">Edit</a>
+              {% else %}
+              <a href="{{ url_for('listing_view', usr_feedback=usr, listings_file=listing) }}">View</a>
+              {% endif %}
+            </td>
             <td><a href="{{ url_for('download_ratings', usr=usr, listing=listing) }}">Download</a></td>
             </tr>
             
