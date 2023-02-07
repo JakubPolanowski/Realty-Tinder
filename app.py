@@ -118,7 +118,7 @@ def spotlight():
         return render_template('error.html', error=404, subtitle='The listings file does not exist'), 404
 
     spotlight_data = df.drop(columns=['photos']).to_dict(orient='records')
-    return render_template('spotlight.html', spotlight_file=spotlight_name, spotlight_data=spotlight_data)
+    return render_template('spotlight.html', spotlight_file=spotlight_name, spotlight_data=spotlight_data, spotlight_name=spotlight_name.replace('_', ' '))
 
 
 @app.route('/ratings')

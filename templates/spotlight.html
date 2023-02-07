@@ -8,7 +8,14 @@
 
 <section class="section">
   <div class="container">
-    {% if spotlight_data is defined %} {# TODO #}
+    {% if spotlight_data is defined %}
+    <div class="block">
+      <h1 class="title">Listing Spotlight</h1>
+      <h2 class="subtitle">{{ spotlight_name }}</h2>
+    </div>
+    <div class="block">
+      <a href="{{ url_for('listing_view', listings_file=spotlight_file) }}" class="button is-link is-size-5 is-fullwidth has-text-weight-bold">View Listing Pictures</a>
+    </div>
     <div class="block">
       <table id="ratings" class="table is-striped" style="width:100%">
         <thead>
