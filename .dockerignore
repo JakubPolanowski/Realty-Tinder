@@ -162,7 +162,7 @@ cython_debug/
 .vscode
 
 # using data folder instead of database, ignore folder in git
-data/
+data/*
 temp/
 flask_session/
 
