@@ -57,6 +57,9 @@ def prepare_special_values(listing: Dict[str, Any]):
     if listing['flags'] is None:
         listing['flags'] = ""
 
+    # deal with NA values
+    listing['interior sqft'] = 0 if listing['interior sqft'] != listing['interior sqft'] else listing['interior sqft']
+
     return listing
 
 
