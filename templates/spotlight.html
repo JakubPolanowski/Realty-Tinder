@@ -13,49 +13,67 @@
       <table id="ratings" class="table is-striped" style="width:100%">
         <thead>
           <tr>
-            <th>User</th>
-            <th>Listing File</th>
-            <th>Hated</th>
-            <th>Ok</th>
-            <th>Loved</th>
-            <th>Total</th>
-            <th>Listings</th>
-            <th>View</th>
-            <th>Download</th>
+            <th>id</th>
+            <th>list date</th>
+            <th>flags</th>
+            <th>home type</th>
+            <th>year built</th>
+            <th>price (thousands)</th>
+            <th>hoa fee</th>
+            <th>beds</th>
+            <th>baths</th>
+            <th>sqft</th>
+            <th>acres</th>
+            <th>address</th>
+            <th>city</th>
+            <th>state</th>
+            <th>zip</th>
+            <th>Minute to Work</th>
           </tr>
         </thead>
         <tbody>
-          
-          {% for usr, usr_ratings in stats.items() %}
-          {% for listing, listing_ratings in usr_ratings.items() %}
-          
+              
+          {% for row in spotlight_data %}
           <tr>
-            <td>{{ usr }}</td>
-            <td>{{ listing }}</td>
-            <td>{{ listing_ratings['Hate'] }}</td>
-            <td>{{ listing_ratings['Ok'] }}</td>
-            <td>{{ listing_ratings['Love'] }}</td>
-            <td>{{ listing_ratings['Total'] }}</td>
-            <td>{{ listing_ratings['Listings'] }}</td>
-            <td><a href="{{ url_for('listing_view', usr_feedback=usr, listings_file=listing) }}">View</a></td>
-            <td><a href="{{ url_for('download_ratings', usr=usr, listing=listing) }}">Download</a></td>
-            </tr>
+            <td><a href="{{ row['url'] }}">{{ row['id'] }}</a></td>
+            <td>{{ row['list date'] }}</td>
+            <td>{{ row['flags'] }}</td>
+            <td>{{ row['home type'] }}</td>
+            <td>{{ row['year built'] }}</td>
+            <td>{{ row['price'] }}</td>
+            <td>{{ row['hoa fee'] }}</td>
+            <td>{{ row['beds'] }}</td>
+            <td>{{ row['baths'] }}</td>
+            <td>{{ row['interior sqft'] }}</td>
+            <td>{{ row['acres'] }}</td>
+            <td>{{ row['addresss line'] }}</td>
+            <td>{{ row['city'] }}</td>
+            <td>{{ row['state'] }}</td>
+            <td>{{ row['zipcode'] }}</td>
+            <td>{{ '%.1f' % row['Minutes to Work']|round(1) }}</td>
             
-            {% endfor %}
+          </tr>
           {% endfor %}
-
+          
         </tbody>
         <tfoot>
             <tr>
-              <th>User</th>
-              <th>Listing File</th>
-              <th>Hated</th>
-              <th>Ok</th>
-              <th>Loved</th>
-              <th>Total</th>
-              <th>Listings</th>
-              <th>View</th>
-              <th>Download</th>
+              <th>id</th>
+              <th>list date</th>
+              <th>flags</th>
+              <th>home type</th>
+              <th>year built</th>
+              <th>price (thousands)</th>
+              <th>hoa fee</th>
+              <th>beds</th>
+              <th>baths</th>
+              <th>sqft</th>
+              <th>acres</th>
+              <th>address</th>
+              <th>city</th>
+              <th>state</th>
+              <th>zip</th>
+              <th>Minute to Work</th>
             </tr>
         </tfoot>
       </table>

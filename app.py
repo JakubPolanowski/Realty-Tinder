@@ -104,9 +104,21 @@ def spotlight():
     with open(spotlight_path, 'r') as f:
         spotlight_name = f.read()
 
-    # TODO FINISH
+    try:
+        df = pd.read_excel(Path('data', 'listings', f'{spotlight_name}.xlsx'))
+        df['list date'] = df['list date'].dt.strftime('%m/%d/%Y')
+        df['price'] = df['price']/1000
+        df['acres'] = df['lot sqft'].apply(
+            lambda x: '' if pd.isna(x) else f'{x/43560:,.2f}')
+        df['interior sqft'] = df['interior sqft'].apply(
+            lambda x: '' if pd.isna(x) else f'{x:.0f}'
+        )
+        df.fillna('', inplace=True)
+    except:
+        return render_template('error.html', error=404, subtitle='The listings file does not exist'), 404
 
-    return render_template('spotlight.html')
+    spotlight_data = df.drop(columns=['photos']).to_dict(orient='records')
+    return render_template('spotlight.html', spotlight_file=spotlight_name, spotlight_data=spotlight_data)
 
 
 @app.route('/ratings')
