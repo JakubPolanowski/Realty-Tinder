@@ -6,6 +6,7 @@ import uuid
 import pandas as pd
 import json
 import helpers
+from helpers.admin import get_superuser
 import re
 
 app = Flask(__name__)
@@ -18,17 +19,10 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-if (super_path := Path('data', 'superuser.json')).exists():
-    with open(super_path, 'r') as f:
-        super_json = json.load(f)
-    SUPERUSER = super_json.get('user')
-else:
-    SUPERUSER = None
-
 
 @app.context_processor
 def inject_user():
-    return dict(user=session.get('user'), superuser=(session.get('user') == SUPERUSER))
+    return dict(user=session.get('user'), superuser=(session.get('user') == get_superuser()))
 
 
 @app.route('/')
@@ -294,7 +288,7 @@ def admin():
 
     else:
 
-        if session.get('user') != SUPERUSER:
+        if session.get('user') != get_superuser():
             return render_template('error.html', error=404), 404
 
         files = glob("data/listings/*.xlsx")
