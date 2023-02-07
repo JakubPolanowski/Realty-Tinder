@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import requests
 import json
 import re
+import pandas as pd
 
 
 def prepare_special_values(listing: Dict[str, Any]):
@@ -58,7 +59,8 @@ def prepare_special_values(listing: Dict[str, Any]):
         listing['flags'] = ""
 
     # deal with NA values
-    listing['interior sqft'] = 0 if listing['interior sqft'] != listing['interior sqft'] else listing['interior sqft']
+    listing['interior sqft'] = 0 if pd.isna(
+        listing['interior sqft']) else listing['interior sqft']
 
     return listing
 
