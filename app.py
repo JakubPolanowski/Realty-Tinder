@@ -31,6 +31,8 @@ def index():
     if not Path('data', 'superuser.json').exists():
         return redirect(url_for('first_time_config'))
 
+    return redirect(url_for('spotlight'))
+
     files = glob("data/listings/*.xlsx")
     files = [(p.stem.replace('_', ' '), p.stem)
              for p in [Path(f) for f in files]]
