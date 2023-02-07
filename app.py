@@ -361,9 +361,15 @@ def listings(listings_file: str, index: int):
             feedback[int(form['index'])] = form['feedback']
             feedback['total'] = form['total']
 
+            total = int(form['total'])
+
+            next_index = int(form['index'])+1
+            next_index = total - \
+                1 if next_index >= total else next_index
+
             return redirect(
                 url_for(
-                    'listings', listings_file=form['filename'], index=int(form['index'])+1)
+                    'listings', listings_file=form['filename'], index=next_index)
             )
 
         if 'clear' in form and form.get('clear') == 'clear-feedback':
