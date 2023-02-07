@@ -16,7 +16,7 @@ processes = []
 
 [mounts]
   source="realty_tinder_data"
-  destination="/data"
+  destination="/workspace/data"
 
 [[services]]
   http_checks = []
