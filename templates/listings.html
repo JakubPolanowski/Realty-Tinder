@@ -156,9 +156,46 @@
               </div>
               <hr class="mt-0"/>
               <div class="columns">
+                {% if 'Flood Risk' in listing and 'Wildfire Risk' in listing %}
+                  <div class="column"><b>Flags:</b></div>
+                  <div class="column">{{ listing['flags'] }}</div>
+                  <div class="column {% if listing['Flood Risk'].lower() not in ['minimal', '', 'none', 'minor'] %}notification is-danger{% endif %}"><b>Flood Risk:</b></div>
+                  <div class="column">{{ listing['Flood Risk'] }}</div>
+                  <div class="column {% if listing['Wildfire Risk'].lower() not in ['minimal', '', 'none', 'minor'] %}notification is-danger{% endif %}"><b>Wildfire Risk:</b></div>
+                  <div class="column">{{ listing['Wildfire Risk'] }}</div>
+
+                {% else %}
                 <div class="column is-one-third"><b>Flags:</b></div>
                 <div class="column">{{ listing['flags'] }}</div>
+                {% endif %}
+
               </div>
+              {% if 'has RTC' in listing or 'has EPB Fiber' in listing or 'has Spectrum' in listing or 'has Windstream' in listing %}
+              <hr class="mt-0"/>
+              <div class="columns">
+
+                {% if 'has RTC' in listing %}
+                <div class="column notification {% if listing['has RTC'] == 'False' %}is-warning{% else %}is-success{% endif %}"><b>Has RTC:</b></div>
+                <div class="column">{{ listing['has RTC'] }}</div>
+                {% endif %}
+
+                {% if 'has EPB Fiber' in listing %}
+                <div class="column notification {% if listing['has EPB Fiber'] == 'False' %}is-warning{% else %}is-success{% endif %}"><b>Has EPB Fiber:</b></div>
+                <div class="column">{{ listing['has EPB Fiber'] }}</div>
+                {% endif %}
+
+                {% if 'has Spectrum' in listing %}
+                <div class="column notification {% if listing['has Spectrum'] == 'False' %}is-warning{% else %}is-success{% endif %}"><b>Has Spectrum:</b></div>
+                <div class="column">{{ listing['has Spectrum'] }}</div>
+                {% endif %}
+
+                {% if 'has Windstream' in listing %}
+                <div class="column notification {% if listing['has Windstream'] == 'False' %}is-warning{% else %}is-success{% endif %}"><b>Has Windstream:</b></div>
+                <div class="column">{{ listing['has Windstream'] }}</div>
+                {% endif %}
+
+              </div>
+              {% endif %}
             </div>
             <div class="block">
               <div class="columns">

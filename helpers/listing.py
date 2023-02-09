@@ -59,6 +59,18 @@ def prepare_special_values(listing: Dict[str, Any]):
     if listing['flags'] is None:
         listing['flags'] = ""
 
+    if 'Flood Risk' in listing:
+        if listing['Flood Risk'] is None:
+            listing['Flood Risk'] = "None"
+
+    if 'Wildfire Risk' in listing:
+        if listing['Wildfire Risk'] is None:
+            listing['Wildfire Risk'] = "None"
+
+    for internet_col in ['has RTC', 'has EPB Fiber', 'has Spectrum', 'has Windstream']:
+        if internet_col in listing:
+            listing[internet_col] = str(listing[internet_col])
+
     # deal with NA values
     listing['interior sqft'] = 0 if pd.isna(
         listing['interior sqft']) else listing['interior sqft']
