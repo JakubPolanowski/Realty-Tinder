@@ -68,6 +68,8 @@ def login():
                 if 'pwd' in form:
                     if super_config.get("password") == form['pwd']:
                         session['user'] = form['user']
+                        if 'feedback' in session:
+                            session.pop('feedback')
                         if 'current_page' in form:
                             return redirect(form['current_page'])
                         else:
@@ -79,6 +81,8 @@ def login():
                     return redirect(url_for('login', ask_pass=True))
             else:
                 session['user'] = form['user']
+                if 'feedback' in session:
+                    session.pop('feedback')
                 if 'current_page' in form:
                     return redirect(form['current_page'])
                 else:
