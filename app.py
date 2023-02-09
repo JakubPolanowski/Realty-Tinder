@@ -144,13 +144,12 @@ def ratings():
                 with open(rating_file, 'r') as f:
                     ratings[usr_ratings.name][rating_file.stem] = json.load(
                         f)
-                    total = ratings[usr_ratings.name][rating_file.stem].pop(
-                        'total')
 
     stats = {}
     for usr, usr_ratings in ratings.items():
         stats[usr] = {}
         for file, file_ratings in usr_ratings.items():
+            total = ratings[usr][file].pop('total')
             stats[usr][file] = {'Hate': 0, 'Ok': 0,
                                 'Love': 0, 'Total': len(file_ratings),
                                 'Listings': total}
