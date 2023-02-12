@@ -170,7 +170,7 @@ def download_ratings():
         return render_template('error.html', error=400, subtitle="Invalid listing file name"), 400
 
     df = pd.read_excel(listing_path)
-    df.drop(columns=['photos'], inplace=True)
+    # df.drop(columns=['photos'], inplace=True)
 
     if request.args.get('usr') is not None:
         if not (ratings_path := Path('data', 'ratings', request.args.get('usr'), f'{request.args.get("listing")}.json')).exists():
